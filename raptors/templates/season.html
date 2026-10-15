@@ -1,0 +1,143 @@
+{% set page_title = cfg.TEAM_NAME ~ " " ~ season_label ~ " Tracker" %}
+{% include "_head.html" %}
+<main class="page">
+  {% if not fragment %}<nav class="crumbs" aria-label="Report navigation"><a href="../index.html">All seasons</a></nav>{% endif %}
+
+  <header class="board">
+    <p class="eyebrow">{{ cfg.TEAM_CITY }} {{ cfg.TEAM_NAME }} · Season tracker</p>
+    <h1>{{ season_label }} season</h1>
+    <div class="facts-row">
+      {% if has_games %}<span>Through game {{ gp }} · {{ last_date }}</span>{% elif opener %}<span>Season opener: <b>{{ opener }}</b></span>{% endif %}
+      <span>Updated {{ generated }}</span>
+    </div>
+  </header>
+
+  {% if has_games %}
+  <section aria-labelledby="glance">
+    <div class="head"><p class="eyebrow">At a glance</p><h2 id="glance">Where they stand</h2></div>
+    <div class="tiles">
+      {% for k in kpis %}
+      <div class="tile"><span class="label">{{ k.label }}</span><span class="value">{{ k.value }}</span><span class="note">{{ k.note }}</span></div>
+      {% endfor %}
+    </div>
+    <p class="small">Pythagorean record: the record a team "should" have from its points scored and allowed (exponent 14). SRS (Simple Rating System): average margin adjusted for opponent strength, solved by least squares over every game this season; it also estimates home-court advantage, currently {{ "%.1f"|format(hca) }} points.</p>
+  </section>
+
+  <section aria-labelledby="form">
+    <div class="head"><p class="eyebrow">Form</p><h2 id="form">Game by game</h2>
+      <p class="lede">Single games are noisy; the 10-game line shows the trend. Hover a bar for the result.</p></div>
+    <div class="plate"><div class="chart" data-spec="rolling" role="img" aria-label="Net rating by game with a 10-game rolling line"></div></div>
+  </section>
+
+  <section aria-labelledby="league">
+    <div class="head"><p class="eyebrow">League context</p><h2 id="league">Offense vs defense</h2>
+      <p class="lede">Every team's points scored and allowed per 100 possessions. Up and to the right is better; the lines are league averages.</p></div>
+    <div class="split wide-left">
+      <div class="plate"><div class="chart" data-spec="league" role="img" aria-label="Offensive vs defensive rating for all 30 teams"></div></div>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th class="l">Four factors</th><th>{{ team }}</th><th>NBA rank</th></tr></thead>
+          <tbody>
+            {% for block in factor_table %}
+            <tr class="group"><td colspan="3" class="l">{{ block.side }}</td></tr>
+            {% for lbl, val, rk in block.rows %}
+            <tr><td class="l">{{ lbl }}</td><td class="strong">{{ val }}{% if 'FT/FGA' not in lbl %}%{% endif %}</td><td><span class="rank {{ 'top' if rk <= 8 else ('bottom' if rk >= 23 else '') }}">{{ rk }} of 30</span></td></tr>
+            {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="roster">
+    <div class="head"><p class="eyebrow">Roster</p><h2 id="roster">Players</h2>
+      <p class="lede">Per-game averages, regular season. The last two columns compare each player's last 10 team games with his season: a quick way to spot role changes (minutes) and hot or cold stretches (TS%).</p></div>
+    <div class="table-wrap">
+      <table class="data sticky">
+        <thead><tr><th class="l">Player</th><th>GP</th><th>GS</th><th>MPG</th><th>PTS</th><th>REB</th><th>AST</th><th>TS%</th><th>3P%</th><th>USG%</th><th>GmSc</th><th>+/−</th><th>L10 MPG</th><th>L10 TS%</th></tr></thead>
+        <tbody>
+          {% for p in players %}
+          <tr>
+            <td class="l player">{{ p.name }}</td><td>{{ p.gp }}</td><td class="dim">{{ p.gs }}</td><td>{{ "%.1f"|format(p.mpg) }}</td>
+            <td class="strong">{{ "%.1f"|format(p.pts) }}</td><td>{{ "%.1f"|format(p.reb) }}</td><td>{{ "%.1f"|format(p.ast) }}</td>
+            <td>{{ "%.1f"|format(100 * p.ts) if p.ts == p.ts else "–" }}</td>
+            <td>{{ "%.1f"|format(100 * p.fg3) if p.fg3 == p.fg3 and p.fg3a >= 10 else "–" }}</td>
+            <td>{{ "%.1f"|format(p.usg) if p.usg == p.usg else "–" }}</td><td>{{ "%.1f"|format(p.gmsc) }}</td>
+            <td class="{{ 'pos' if p.pm > 0.05 else ('neg' if p.pm < -0.05 else '') }}">{{ "%+.1f"|format(p.pm) }}</td>
+            {% if p.l10_gp >= 3 %}
+            {% set dm = p.l10_mpg - p.mpg %}{% set dt = (p.l10_ts - p.ts) * 100 if p.l10_ts == p.l10_ts and p.ts == p.ts else 0 %}
+            <td class="{{ 'pos' if dm >= 3 else ('neg' if dm <= -3 else 'dim') }}">{{ "%.1f"|format(p.l10_mpg) }}</td>
+            <td class="{{ 'pos' if dt >= 4 else ('neg' if dt <= -4 else 'dim') }}">{{ "%.1f"|format(100 * p.l10_ts) if p.l10_ts == p.l10_ts else "–" }}</td>
+            {% else %}<td class="dim">–</td><td class="dim">–</td>{% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="log">
+    <div class="head"><p class="eyebrow">Results</p><h2 id="log">Game log</h2></div>
+    {% macro log_table(rows) %}
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th class="l">Date</th><th class="l">Game</th><th class="l">Result</th><th>Score</th><th>Net rating</th><th class="l">Report</th></tr></thead>
+        <tbody>
+          {% for g in rows %}
+          <tr><td class="l dim">{{ g.date }}</td><td class="l">{{ g.matchup }}</td><td class="l"><span class="wl {{ 'W' if g.win else 'L' }}">{{ 'W' if g.win else 'L' }}</span></td>
+            <td>{{ g.score }}</td><td class="{{ 'pos' if g.net > 0 else 'neg' }}">{{ "%+.1f"|format(g.net) }}</td>
+            <td class="l">{% if g.href %}<a href="{{ g.href }}">Open</a>{% else %}<span class="dim">–</span>{% endif %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endmacro %}
+    {{ log_table(log[:10]) }}
+    {% if log|length > 10 %}
+    <details class="more"><summary>All {{ log|length }} games</summary>{{ log_table(log[10:]) }}</details>
+    {% endif %}
+  </section>
+
+  <section aria-labelledby="sq">
+    <div class="head"><p class="eyebrow">Your turn</p><h2 id="sq">Questions for the season write-up</h2></div>
+    <div class="plate"><ol class="questions">{% for q in questions %}<li>{{ q }}</li>{% endfor %}</ol></div>
+  </section>
+  {% else %}
+  <section>
+    <div class="callout">No regular-season games yet. After each game, run <code>python run.py game</code>; this page updates itself.</div>
+  </section>
+  {% endif %}
+
+  {% if upcoming or milestones %}
+  <section aria-labelledby="next">
+    <div class="head"><p class="eyebrow">Schedule</p><h2 id="next">Coming up</h2></div>
+    <div class="cols">
+      {% if upcoming %}
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th class="l">Date</th><th class="l">Game</th><th class="l">Note</th></tr></thead>
+          <tbody>{% for g in upcoming %}<tr><td class="l dim">{{ g.date }}</td><td class="l strong">{{ g.matchup }}</td><td class="l">{% if g.b2b %}<span class="pill">Back-to-back</span> {% endif %}<span class="dim">{{ g.note }}</span></td></tr>{% endfor %}</tbody>
+        </table>
+      </div>
+      {% endif %}
+      {% if milestones %}
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th class="l">Checkpoint</th><th>Game</th><th class="l">Date</th></tr></thead>
+          <tbody>{% for m in milestones %}<tr><td class="l strong">{{ m.label }}</td><td>{{ m.game }}</td><td class="l">{{ m.date }} · {{ m.matchup }}</td></tr>{% endfor %}</tbody>
+        </table>
+      </div>
+      {% if sched_note %}<p class="small">{{ sched_note }}</p>{% endif %}
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <footer class="foot">
+    {% if pngs and not fragment %}<p>Charts to post: {% for p in pngs %}<a href="img/season/{{ p }}">{{ p }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+    <p>Ratings use Basketball-Reference's possession estimate and count regular-season games only (the NBA Cup final is excluded, as in the standings).</p>
+    <p>{{ cfg.DATA_CREDIT }} · Built {{ generated }}</p>
+  </footer>
+</main>
+{% include "_scripts.html" %}

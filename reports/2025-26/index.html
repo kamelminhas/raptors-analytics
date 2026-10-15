@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Raptors 2025-26 Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@400;500;600&family=Big+Shoulders+Display:wght@700;800&display=swap">
+<style>
+/* Layout: one centred "post-game sheet" column. A scoreboard header, then sections that each
+   pair an eyebrow + condensed heading with a chart plate or a data table. */
+:root {
+  --plane: #f1f1f4;
+  --surface: #ffffff;
+  --ink: #141417;
+  --ink-2: #4f4e57;
+  --muted: #74737e;
+  --line: #e2e1e8;
+  --accent: #ce1141;
+  --accent-text: #b20e38;
+  --on-accent: #ffffff;
+  --good: #1d5fae;
+  --bad: #a9441a;
+  --good-bg: #e6effa;
+  --bad-bg: #fbebe3;
+  --display: "Big Shoulders Display", "Oswald", "Arial Narrow", Impact, sans-serif;
+  --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --data: "Barlow Semi Condensed", "Barlow", "Arial Narrow", sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --plane: #0e0e11; --surface: #1b1b1f; --ink: #f3f3f5; --ink-2: #c5c4cc; --muted: #9291a0;
+    --line: #2d2d34; --accent: #ee3d5a; --accent-text: #ff7a90; --on-accent: #ffffff;
+    --good: #82b8f6; --bad: #f4a07a; --good-bg: rgba(57,135,229,.16); --bad-bg: rgba(217,89,38,.18);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --plane: #0e0e11; --surface: #1b1b1f; --ink: #f3f3f5; --ink-2: #c5c4cc; --muted: #9291a0;
+  --line: #2d2d34; --accent: #ee3d5a; --accent-text: #ff7a90; --on-accent: #ffffff;
+  --good: #82b8f6; --bad: #f4a07a; --good-bg: rgba(57,135,229,.16); --bad-bg: rgba(217,89,38,.18);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--plane); color: var(--ink); font: 400 15px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent-text); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.page { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 64px; display: grid; gap: 40px; }
+.crumbs { display: flex; flex-wrap: wrap; gap: 6px 16px; font: 500 13px var(--body); color: var(--muted); }
+.crumbs a { color: var(--ink-2); text-decoration: none; }
+.crumbs a:hover { color: var(--accent-text); text-decoration: underline; }
+.crumbs .push { margin-left: auto; display: flex; gap: 16px; }
+.eyebrow { font: 600 12px/1.2 var(--body); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1, h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .01em; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1; }
+h2 { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.05; }
+h3 { font: 600 15px/1.3 var(--body); margin: 0; }
+section { display: grid; gap: 14px; min-width: 0; }
+.head { display: grid; gap: 6px; }
+.lede { color: var(--ink-2); margin: 0; max-width: 70ch; }
+.small { font-size: 13px; color: var(--muted); }
+.plate { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; }
+.split { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.split.even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.split.wide-left { grid-template-columns: minmax(0, 620px) minmax(0, 1fr); }
+details.more { display: grid; gap: 10px; }
+details.more summary { cursor: pointer; font: 600 14px var(--body); color: var(--accent-text); width: fit-content; }
+@media (max-width: 820px) { .split, .split.even, .split.wide-left { grid-template-columns: minmax(0, 1fr); } }
+
+/* scoreboard */
+.board { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px clamp(16px, 3vw, 28px) 18px; display: grid; gap: 16px; }
+.scoreline { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; }
+.side { display: flex; align-items: center; gap: clamp(10px, 2vw, 20px); min-width: 0; }
+.side.opp { justify-content: flex-end; text-align: right; }
+.who { display: grid; gap: 2px; min-width: 0; }
+.abbr { font: 800 clamp(24px, 4.2vw, 36px)/1 var(--display); letter-spacing: .03em; }
+.name { font: 500 13px/1.2 var(--body); color: var(--muted); }
+.pts { font: 800 clamp(52px, 11vw, 96px)/.85 var(--display); }
+.side.winner .pts { color: var(--ink); }
+.side.loser .pts { color: var(--muted); }
+.mid { display: grid; justify-items: center; gap: 6px; }
+.result { font: 700 13px/1 var(--body); letter-spacing: .06em; padding: 6px 12px; border-radius: 999px; }
+.result.W { background: var(--accent); color: var(--on-accent); }
+.result.L { background: transparent; color: var(--ink-2); border: 1.5px solid var(--ink-2); }
+.status { font: 500 12px var(--body); color: var(--muted); }
+@media (max-width: 560px) {
+  .side { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .side.opp { flex-direction: column-reverse; align-items: flex-end; }
+  .side .name { display: none; }
+  .pts { font-size: clamp(44px, 14vw, 64px); }
+}
+.facts-row { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 14px; color: var(--ink-2); }
+.facts-row b { color: var(--ink); font-weight: 600; }
+table.linescore { border-collapse: collapse; font: 500 14px var(--data); font-variant-numeric: tabular-nums; }
+table.linescore th, table.linescore td { padding: 4px 10px; text-align: center; }
+table.linescore th { font-size: 12px; color: var(--muted); font-weight: 600; }
+table.linescore td:first-child, table.linescore th:first-child { text-align: left; padding-left: 0; font-weight: 600; }
+table.linescore td.total { font-weight: 700; border-left: 1px solid var(--line); }
+
+/* stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+.tile .label { font: 600 12px var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tile .value { font: 600 30px/1.1 var(--body); }
+.tile .note { font-size: 13px; color: var(--muted); }
+.delta { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px 4px; width: fit-content; font: 600 12px/1.25 var(--data); padding: 3px 8px; border-radius: 8px; }
+td .delta { flex-wrap: nowrap; white-space: nowrap; }
+.delta.good { color: var(--good); background: var(--good-bg); }
+.delta.bad { color: var(--bad); background: var(--bad-bg); }
+.delta.flat { color: var(--muted); border: 1px solid var(--line); }
+.delta .vs { font-weight: 500; opacity: .85; }
+
+/* tables */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+table.data { width: 100%; border-collapse: collapse; font: 400 14px/1.3 var(--data); font-variant-numeric: tabular-nums; }
+table.data th { font: 600 11.5px var(--body); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 11px 10px 9px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.data td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.data tr:last-child td { border-bottom: 0; }
+table.data th.wrap { white-space: normal; line-height: 1.2; vertical-align: bottom; }
+table.data.compact th, table.data.compact td { padding-inline: 7px; }
+table.data.sticky th:first-child, table.data.sticky td:first-child { position: sticky; left: 0; background: var(--surface); z-index: 1; }
+table.data.sticky tr.group td:first-child { background: var(--plane); }
+table.data .l { text-align: left; }
+table.data td.player { font-weight: 600; font-family: var(--body); }
+table.data td.player small { font-weight: 400; color: var(--muted); margin-left: 6px; }
+table.data tr.group td { font: 600 11px var(--body); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); background: var(--plane); padding: 6px 10px; }
+table.data td.strong { font-weight: 600; }
+table.data td.dim { color: var(--muted); }
+table.data td.pos { color: var(--good); font-weight: 600; }
+table.data td.neg { color: var(--bad); font-weight: 600; }
+.rank { display: inline-block; min-width: 3.2em; font: 600 11px var(--body); color: var(--muted); }
+.rank.top { color: var(--good); }
+.rank.bottom { color: var(--bad); }
+.wl { display: inline-block; width: 1.6em; text-align: center; font-weight: 700; border-radius: 4px; }
+.wl.W { color: var(--on-accent); background: var(--accent); }
+.wl.L { color: var(--ink-2); border: 1px solid var(--line); }
+
+/* charts */
+.chart { width: 100%; min-height: 180px; }
+div.chart.vega-embed { display: block; width: 100%; }
+.chart svg { max-width: 100%; height: auto; }
+.chart .fallback { padding: 24px; color: var(--muted); font-size: 14px; }
+#vg-tooltip-element.vg-tooltip { font: 400 13px/1.4 var(--body) !important; background: var(--surface) !important; color: var(--ink) !important; border: 1px solid var(--line) !important; border-radius: 8px !important; box-shadow: 0 6px 20px rgba(0,0,0,.14) !important; max-width: 340px; }
+#vg-tooltip-element.vg-tooltip td.key { color: var(--muted) !important; font-weight: 500; }
+#vg-tooltip-element.vg-tooltip td.value { white-space: normal; }
+
+/* lists */
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
+ul.facts, ol.questions { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+ul.facts li { padding-left: 16px; position: relative; }
+ul.facts li::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); }
+ul.facts li.factor::before, ul.facts li.player::before { background: var(--accent); }
+ol.questions { counter-reset: q; }
+ol.questions li { counter-increment: q; display: grid; grid-template-columns: 2.2em 1fr; }
+ol.questions li::before { content: "Q" counter(q); font: 700 13px/1.55 var(--data); color: var(--accent-text); }
+.statline { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.statline div { display: grid; }
+.statline b { font: 600 20px/1.2 var(--body); }
+.statline span { font-size: 12px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+.notes { max-width: 72ch; }
+.notes h2 { font-size: 22px; margin-top: 8px; }
+.notes :is(p, ul, ol) { margin: 8px 0; }
+.callout { border: 1px dashed var(--line); border-radius: var(--radius); padding: 14px 16px; color: var(--ink-2); background: var(--surface); }
+.callout code, .small code { font: 500 13px ui-monospace, "SF Mono", Menlo, Consolas, monospace; background: var(--plane); padding: 1px 6px; border-radius: 4px; }
+.pill { font: 600 11px var(--body); letter-spacing: .05em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+footer.foot { border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 8px; font-size: 13px; color: var(--muted); }
+footer.foot p { margin: 0; max-width: 90ch; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<main class="page">
+<nav class="crumbs" aria-label="Report navigation"><a href="../index.html">All seasons</a></nav>
+  <header class="board">
+    <p class="eyebrow">Toronto Raptors · Season tracker</p>
+    <h1>2025-26 season</h1>
+    <div class="facts-row">
+<span>Through game 82 · Sunday, April 12, 2026</span>      <span>Updated 2026-09-28 18:20</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="glance">
+    <div class="head"><p class="eyebrow">At a glance</p><h2 id="glance">Where they stand</h2></div>
+    <div class="tiles">
+      <div class="tile"><span class="label">Record</span><span class="value">46-36</span><span class="note">11th in the NBA by win %</span></div>
+      <div class="tile"><span class="label">Net rating</span><span class="value">+2.9</span><span class="note">11th · points per 100 possessions</span></div>
+      <div class="tile"><span class="label">Offense</span><span class="value">115.9</span><span class="note">15th · points scored per 100</span></div>
+      <div class="tile"><span class="label">Defense</span><span class="value">113.1</span><span class="note">5th · points allowed per 100</span></div>
+      <div class="tile"><span class="label">Pythagorean record</span><span class="value">48-34</span><span class="note">-2.1 wins vs expected</span></div>
+      <div class="tile"><span class="label">SRS</span><span class="value">+2.8</span><span class="note">11th · schedule-adjusted margin</span></div>
+    </div>
+    <p class="small">Pythagorean record: the record a team "should" have from its points scored and allowed (exponent 14). SRS (Simple Rating System): average margin adjusted for opponent strength, solved by least squares over every game this season; it also estimates home-court advantage, currently 1.7 points.</p>
+  </section>
+
+  <section aria-labelledby="form">
+    <div class="head"><p class="eyebrow">Form</p><h2 id="form">Game by game</h2>
+      <p class="lede">Single games are noisy; the 10-game line shows the trend. Hover a bar for the result.</p></div>
+    <div class="plate"><div class="chart" data-spec="rolling" role="img" aria-label="Net rating by game with a 10-game rolling line"></div></div>
+  </section>
+
+  <section aria-labelledby="league">
+    <div class="head"><p class="eyebrow">League context</p><h2 id="league">Offense vs defense</h2>
+      <p class="lede">Every team's points scored and allowed per 100 possessions. Up and to the right is better; the lines are league averages.</p></div>
+    <div class="split wide-left">
+      <div class="plate"><div class="chart" data-spec="league" role="img" aria-label="Offensive vs defensive rating for all 30 teams"></div></div>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th class="l">Four factors</th><th>TOR</th><th>NBA rank</th></tr></thead>
+          <tbody>
+            <tr class="group"><td colspan="3" class="l">Offense</td></tr>
+            <tr><td class="l">Shooting (eFG%)</td><td class="strong">54.6%</td><td><span class="rank ">16 of 30</span></td></tr>
+            <tr><td class="l">Turnovers (TOV%)</td><td class="strong">12.2%</td><td><span class="rank top">8 of 30</span></td></tr>
+            <tr><td class="l">Off. rebounding (ORB%)</td><td class="strong">25.5%</td><td><span class="rank ">16 of 30</span></td></tr>
+            <tr><td class="l">Free throws (FT/FGA)</td><td class="strong">0.204</td><td><span class="rank ">17 of 30</span></td></tr>
+            <tr class="group"><td colspan="3" class="l">Defense</td></tr>
+            <tr><td class="l">Opp. shooting (eFG%)</td><td class="strong">54.0%</td><td><span class="rank top">8 of 30</span></td></tr>
+            <tr><td class="l">Forced turnovers (TOV%)</td><td class="strong">14.3%</td><td><span class="rank top">4 of 30</span></td></tr>
+            <tr><td class="l">Def. rebounding (DRB%)</td><td class="strong">74.0%</td><td><span class="rank ">19 of 30</span></td></tr>
+            <tr><td class="l">Opp. free throws (FT/FGA)</td><td class="strong">0.222</td><td><span class="rank bottom">25 of 30</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="roster">
+    <div class="head"><p class="eyebrow">Roster</p><h2 id="roster">Players</h2>
+      <p class="lede">Per-game averages, regular season. The last two columns compare each player's last 10 team games with his season: a quick way to spot role changes (minutes) and hot or cold stretches (TS%).</p></div>
+    <div class="table-wrap">
+      <table class="data sticky">
+        <thead><tr><th class="l">Player</th><th>GP</th><th>GS</th><th>MPG</th><th>PTS</th><th>REB</th><th>AST</th><th>TS%</th><th>3P%</th><th>USG%</th><th>GmSc</th><th>+/−</th><th>L10 MPG</th><th>L10 TS%</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="l player">Scottie Barnes</td><td>80</td><td class="dim">80</td><td>33.5</td>
+            <td class="strong">18.1</td><td>7.5</td><td>5.9</td>
+            <td>57.7</td>
+            <td>30.4</td>
+            <td>23.6</td><td>16.7</td>
+            <td class="pos">+3.3</td>
+            <td class="neg">30.3</td>
+            <td class="dim">59.4</td>
+          </tr>
+          <tr>
+            <td class="l player">Brandon Ingram</td><td>77</td><td class="dim">77</td><td>33.8</td>
+            <td class="strong">21.5</td><td>5.6</td><td>3.7</td>
+            <td>57.3</td>
+            <td>38.2</td>
+            <td>27.1</td><td>15.3</td>
+            <td class="pos">+0.6</td>
+            <td class="dim">31.9</td>
+            <td class="pos">62.8</td>
+          </tr>
+          <tr>
+            <td class="l player">Immanuel Quickley</td><td>70</td><td class="dim">70</td><td>32.0</td>
+            <td class="strong">16.4</td><td>4.0</td><td>5.9</td>
+            <td>57.7</td>
+            <td>37.4</td>
+            <td>21.2</td><td>14.1</td>
+            <td class="pos">+1.7</td>
+            <td class="neg">19.3</td>
+            <td class="neg">47.4</td>
+          </tr>
+          <tr>
+            <td class="l player">Jamal Shead</td><td>82</td><td class="dim">12</td><td>22.5</td>
+            <td class="strong">6.6</td><td>1.7</td><td>5.4</td>
+            <td>49.1</td>
+            <td>32.1</td>
+            <td>15.7</td><td>6.5</td>
+            <td class="pos">+2.8</td>
+            <td class="pos">25.6</td>
+            <td class="pos">55.3</td>
+          </tr>
+          <tr>
+            <td class="l player">Sandro Mamukelashvili</td><td>80</td><td class="dim">13</td><td>21.9</td>
+            <td class="strong">11.2</td><td>4.9</td><td>1.9</td>
+            <td>63.7</td>
+            <td>38.9</td>
+            <td>19.0</td><td>10.0</td>
+            <td class="pos">+2.3</td>
+            <td class="dim">22.5</td>
+            <td class="pos">67.9</td>
+          </tr>
+          <tr>
+            <td class="l player">RJ Barrett</td><td>57</td><td class="dim">57</td><td>30.2</td>
+            <td class="strong">19.3</td><td>5.3</td><td>3.3</td>
+            <td>58.5</td>
+            <td>33.9</td>
+            <td>26.1</td><td>14.0</td>
+            <td class="pos">+2.9</td>
+            <td class="dim">31.4</td>
+            <td class="dim">58.5</td>
+          </tr>
+          <tr>
+            <td class="l player">Ja&#39;Kobe Walter</td><td>72</td><td class="dim">19</td><td>20.4</td>
+            <td class="strong">7.5</td><td>2.6</td><td>1.2</td>
+            <td>61.0</td>
+            <td>40.9</td>
+            <td>14.2</td><td>6.1</td>
+            <td class="">+0.0</td>
+            <td class="pos">28.6</td>
+            <td class="dim">62.5</td>
+          </tr>
+          <tr>
+            <td class="l player">Collin Murray-Boyles</td><td>57</td><td class="dim">22</td><td>21.8</td>
+            <td class="strong">8.5</td><td>5.0</td><td>1.9</td>
+            <td>62.1</td>
+            <td>34.0</td>
+            <td>15.5</td><td>8.7</td>
+            <td class="pos">+0.8</td>
+            <td class="dim">19.8</td>
+            <td class="pos">68.1</td>
+          </tr>
+          <tr>
+            <td class="l player">Jakob Poeltl</td><td>46</td><td class="dim">44</td><td>25.0</td>
+            <td class="strong">10.7</td><td>7.0</td><td>2.0</td>
+            <td>69.8</td>
+            <td>–</td>
+            <td>15.4</td><td>10.9</td>
+            <td class="pos">+1.0</td>
+            <td class="dim">23.0</td>
+            <td class="dim">71.6</td>
+          </tr>
+          <tr>
+            <td class="l player">Gradey Dick</td><td>76</td><td class="dim">1</td><td>14.0</td>
+            <td class="strong">6.0</td><td>1.9</td><td>0.7</td>
+            <td>53.8</td>
+            <td>30.1</td>
+            <td>18.7</td><td>4.1</td>
+            <td class="pos">+1.6</td>
+            <td class="neg">6.7</td>
+            <td class="dim">51.3</td>
+          </tr>
+          <tr>
+            <td class="l player">Ochai Agbaji</td><td>42</td><td class="dim">13</td><td>15.5</td>
+            <td class="strong">4.3</td><td>2.3</td><td>0.7</td>
+            <td>49.5</td>
+            <td>18.5</td>
+            <td>13.3</td><td>3.0</td>
+            <td class="pos">+0.2</td>
+<td class="dim">–</td><td class="dim">–</td>          </tr>
+          <tr>
+            <td class="l player">Jamison Battle</td><td>60</td><td class="dim">2</td><td>8.7</td>
+            <td class="strong">3.2</td><td>1.5</td><td>0.4</td>
+            <td>63.5</td>
+            <td>41.2</td>
+            <td>14.1</td><td>2.4</td>
+            <td class="pos">+1.4</td>
+            <td class="neg">3.9</td>
+            <td class="dim">65.8</td>
+          </tr>
+          <tr>
+            <td class="l player">Jonathan Mogbo</td><td>38</td><td class="dim">0</td><td>6.6</td>
+            <td class="strong">1.6</td><td>1.8</td><td>0.7</td>
+            <td>60.8</td>
+            <td>–</td>
+            <td>11.2</td><td>2.0</td>
+            <td class="neg">-1.3</td>
+            <td class="dim">6.2</td>
+            <td class="pos">72.7</td>
+          </tr>
+          <tr>
+            <td class="l player">A.J. Lawson</td><td>23</td><td class="dim">0</td><td>9.8</td>
+            <td class="strong">4.4</td><td>1.9</td><td>0.3</td>
+            <td>58.8</td>
+            <td>42.2</td>
+            <td>17.7</td><td>3.4</td>
+            <td class="neg">-0.4</td>
+            <td class="dim">11.7</td>
+            <td class="pos">63.5</td>
+          </tr>
+          <tr>
+            <td class="l player">Alijah Martin</td><td>23</td><td class="dim">0</td><td>6.3</td>
+            <td class="strong">2.2</td><td>0.9</td><td>0.5</td>
+            <td>43.7</td>
+            <td>19.0</td>
+            <td>19.9</td><td>1.6</td>
+            <td class="neg">-0.6</td>
+            <td class="dim">6.1</td>
+            <td class="neg">31.8</td>
+          </tr>
+          <tr>
+            <td class="l player">Trayce Jackson-Davis</td><td>16</td><td class="dim">0</td><td>5.5</td>
+            <td class="strong">1.9</td><td>2.0</td><td>0.4</td>
+            <td>48.9</td>
+            <td>–</td>
+            <td>17.9</td><td>2.3</td>
+            <td class="neg">-1.7</td>
+            <td class="dim">5.2</td>
+            <td class="pos">68.5</td>
+          </tr>
+          <tr>
+            <td class="l player">Garrett Temple</td><td>22</td><td class="dim">0</td><td>3.3</td>
+            <td class="strong">0.8</td><td>0.4</td><td>0.4</td>
+            <td>44.8</td>
+            <td>25.0</td>
+            <td>15.4</td><td>0.6</td>
+            <td class="">-0.0</td>
+            <td class="dim">2.7</td>
+            <td class="pos">75.0</td>
+          </tr>
+          <tr>
+            <td class="l player">Markelle Fultz</td><td>5</td><td class="dim">0</td><td>7.0</td>
+            <td class="strong">0.8</td><td>0.2</td><td>1.6</td>
+            <td>18.2</td>
+            <td>–</td>
+            <td>18.0</td><td>0.0</td>
+            <td class="neg">-7.2</td>
+            <td class="neg">3.3</td>
+            <td class="dim">20.0</td>
+          </tr>
+          <tr>
+            <td class="l player">Chucky Hepburn</td><td>2</td><td class="dim">0</td><td>6.5</td>
+            <td class="strong">0.0</td><td>0.5</td><td>1.0</td>
+            <td>0.0</td>
+            <td>–</td>
+            <td>23.2</td><td>-1.6</td>
+            <td class="neg">-8.0</td>
+<td class="dim">–</td><td class="dim">–</td>          </tr>
+          <tr>
+            <td class="l player">Mo Bamba</td><td>2</td><td class="dim">0</td><td>3.0</td>
+            <td class="strong">0.0</td><td>1.0</td><td>0.0</td>
+            <td>0.0</td>
+            <td>–</td>
+            <td>13.6</td><td>-0.2</td>
+            <td class="neg">-4.5</td>
+<td class="dim">–</td><td class="dim">–</td>          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="log">
+    <div class="head"><p class="eyebrow">Results</p><h2 id="log">Game log</h2></div>
+        <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th class="l">Date</th><th class="l">Game</th><th class="l">Result</th><th>Score</th><th>Net rating</th><th class="l">Report</th></tr></thead>
+        <tbody>
+          <tr><td class="l dim">Apr 12</td><td class="l">vs BKN</td><td class="l"><span class="wl W">W</span></td>
+            <td>136-101</td><td class="pos">+35.3</td>
+            <td class="l"><a href="games/2026-04-12-vs-BKN.html">Open</a></td></tr>
+          <tr><td class="l dim">Apr 10</td><td class="l">at NY</td><td class="l"><span class="wl L">L</span></td>
+            <td>95-112</td><td class="neg">-18.5</td>
+            <td class="l"><a href="games/2026-04-10-at-NY.html">Open</a></td></tr>
+          <tr><td class="l dim">Apr 9</td><td class="l">vs MIA</td><td class="l"><span class="wl W">W</span></td>
+            <td>128-114</td><td class="pos">+14.7</td>
+            <td class="l"><a href="games/2026-04-09-vs-MIA.html">Open</a></td></tr>
+          <tr><td class="l dim">Apr 7</td><td class="l">vs MIA</td><td class="l"><span class="wl W">W</span></td>
+            <td>121-95</td><td class="pos">+25.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Apr 5</td><td class="l">at BOS</td><td class="l"><span class="wl L">L</span></td>
+            <td>101-115</td><td class="neg">-14.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Apr 3</td><td class="l">at MEM</td><td class="l"><span class="wl W">W</span></td>
+            <td>128-96</td><td class="pos">+32.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Apr 1</td><td class="l">vs SAC</td><td class="l"><span class="wl L">L</span></td>
+            <td>115-123</td><td class="neg">-8.4</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 31</td><td class="l">at DET</td><td class="l"><span class="wl L">L</span></td>
+            <td>116-127</td><td class="neg">-11.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 29</td><td class="l">vs ORL</td><td class="l"><span class="wl W">W</span></td>
+            <td>139-87</td><td class="pos">+49.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 27</td><td class="l">vs NO</td><td class="l"><span class="wl W">W</span></td>
+            <td>119-106</td><td class="pos">+13.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details class="more"><summary>All 82 games</summary>    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th class="l">Date</th><th class="l">Game</th><th class="l">Result</th><th>Score</th><th>Net rating</th><th class="l">Report</th></tr></thead>
+        <tbody>
+          <tr><td class="l dim">Mar 25</td><td class="l">at LAC</td><td class="l"><span class="wl L">L</span></td>
+            <td>94-119</td><td class="neg">-26.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 23</td><td class="l">at UTAH</td><td class="l"><span class="wl W">W</span></td>
+            <td>143-127</td><td class="pos">+14.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 22</td><td class="l">at PHX</td><td class="l"><span class="wl L">L</span></td>
+            <td>98-120</td><td class="neg">-23.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 20</td><td class="l">at DEN</td><td class="l"><span class="wl L">L</span></td>
+            <td>115-121</td><td class="neg">-6.5</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 18</td><td class="l">at CHI</td><td class="l"><span class="wl W">W</span></td>
+            <td>139-109</td><td class="pos">+28.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 15</td><td class="l">vs DET</td><td class="l"><span class="wl W">W</span></td>
+            <td>119-108</td><td class="pos">+11.8</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 13</td><td class="l">vs PHX</td><td class="l"><span class="wl W">W</span></td>
+            <td>122-115</td><td class="pos">+7.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 11</td><td class="l">at NO</td><td class="l"><span class="wl L">L</span></td>
+            <td>111-122</td><td class="neg">-10.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 10</td><td class="l">at HOU</td><td class="l"><span class="wl L">L</span></td>
+            <td>99-113</td><td class="neg">-14.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 8</td><td class="l">vs DAL</td><td class="l"><span class="wl W">W</span></td>
+            <td>122-92</td><td class="pos">+29.8</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 5</td><td class="l">at MIN</td><td class="l"><span class="wl L">L</span></td>
+            <td>107-115</td><td class="neg">-8.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Mar 3</td><td class="l">vs NY</td><td class="l"><span class="wl L">L</span></td>
+            <td>95-111</td><td class="neg">-16.8</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 28</td><td class="l">at WSH</td><td class="l"><span class="wl W">W</span></td>
+            <td>134-125</td><td class="pos">+9.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 25</td><td class="l">vs SA</td><td class="l"><span class="wl L">L</span></td>
+            <td>107-110</td><td class="neg">-3.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 24</td><td class="l">vs OKC</td><td class="l"><span class="wl L">L</span></td>
+            <td>107-116</td><td class="neg">-8.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 22</td><td class="l">at MIL</td><td class="l"><span class="wl W">W</span></td>
+            <td>122-94</td><td class="pos">+29.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 19</td><td class="l">at CHI</td><td class="l"><span class="wl W">W</span></td>
+            <td>110-101</td><td class="pos">+8.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 11</td><td class="l">vs DET</td><td class="l"><span class="wl L">L</span></td>
+            <td>95-113</td><td class="neg">-19.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 8</td><td class="l">vs IND</td><td class="l"><span class="wl W">W</span></td>
+            <td>122-104</td><td class="pos">+17.4</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 5</td><td class="l">vs CHI</td><td class="l"><span class="wl W">W</span></td>
+            <td>123-107</td><td class="pos">+17.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 4</td><td class="l">vs MIN</td><td class="l"><span class="wl L">L</span></td>
+            <td>126-128</td><td class="neg">-2.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Feb 1</td><td class="l">vs UTAH</td><td class="l"><span class="wl W">W</span></td>
+            <td>107-100</td><td class="pos">+6.8</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 30</td><td class="l">at ORL</td><td class="l"><span class="wl L">L</span></td>
+            <td>120-130</td><td class="neg">-9.8</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 28</td><td class="l">vs NY</td><td class="l"><span class="wl L">L</span></td>
+            <td>92-119</td><td class="neg">-27.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 25</td><td class="l">at OKC</td><td class="l"><span class="wl W">W</span></td>
+            <td>103-101</td><td class="pos">+2.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 23</td><td class="l">at POR</td><td class="l"><span class="wl W">W</span></td>
+            <td>110-98</td><td class="pos">+12.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 21</td><td class="l">at SAC</td><td class="l"><span class="wl W">W</span></td>
+            <td>122-109</td><td class="pos">+13.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 20</td><td class="l">at GS</td><td class="l"><span class="wl W">W</span></td>
+            <td>145-127</td><td class="pos">+17.5</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 18</td><td class="l">at LAL</td><td class="l"><span class="wl L">L</span></td>
+            <td>93-110</td><td class="neg">-17.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 16</td><td class="l">vs LAC</td><td class="l"><span class="wl L">L</span></td>
+            <td>117-121</td><td class="neg">-4.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 14</td><td class="l">at IND</td><td class="l"><span class="wl W">W</span></td>
+            <td>115-101</td><td class="pos">+14.5</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 12</td><td class="l">vs PHI</td><td class="l"><span class="wl L">L</span></td>
+            <td>102-115</td><td class="neg">-14.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 11</td><td class="l">vs PHI</td><td class="l"><span class="wl W">W</span></td>
+            <td>116-115</td><td class="pos">+0.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 9</td><td class="l">at BOS</td><td class="l"><span class="wl L">L</span></td>
+            <td>117-125</td><td class="neg">-8.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 7</td><td class="l">at CHA</td><td class="l"><span class="wl W">W</span></td>
+            <td>97-96</td><td class="pos">+1.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 5</td><td class="l">vs ATL</td><td class="l"><span class="wl W">W</span></td>
+            <td>118-100</td><td class="pos">+17.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Jan 3</td><td class="l">vs ATL</td><td class="l"><span class="wl W">W</span></td>
+            <td>134-117</td><td class="pos">+16.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 31</td><td class="l">vs DEN</td><td class="l"><span class="wl L">L</span></td>
+            <td>103-106</td><td class="neg">-3.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 29</td><td class="l">vs ORL</td><td class="l"><span class="wl W">W</span></td>
+            <td>107-106</td><td class="pos">+1.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 28</td><td class="l">vs GS</td><td class="l"><span class="wl W">W</span></td>
+            <td>141-127</td><td class="pos">+12.6</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 26</td><td class="l">at WSH</td><td class="l"><span class="wl L">L</span></td>
+            <td>117-138</td><td class="neg">-20.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 23</td><td class="l">at MIA</td><td class="l"><span class="wl W">W</span></td>
+            <td>112-91</td><td class="pos">+22.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 21</td><td class="l">at BKN</td><td class="l"><span class="wl L">L</span></td>
+            <td>81-96</td><td class="neg">-15.8</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 20</td><td class="l">vs BOS</td><td class="l"><span class="wl L">L</span></td>
+            <td>96-112</td><td class="neg">-17.4</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 18</td><td class="l">at MIL</td><td class="l"><span class="wl W">W</span></td>
+            <td>111-105</td><td class="pos">+6.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 15</td><td class="l">at MIA</td><td class="l"><span class="wl W">W</span></td>
+            <td>106-96</td><td class="pos">+10.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 9</td><td class="l">vs NY</td><td class="l"><span class="wl L">L</span></td>
+            <td>101-117</td><td class="neg">-17.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 7</td><td class="l">vs BOS</td><td class="l"><span class="wl L">L</span></td>
+            <td>113-121</td><td class="neg">-8.5</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 5</td><td class="l">vs CHA</td><td class="l"><span class="wl L">L</span></td>
+            <td>86-111</td><td class="neg">-24.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 4</td><td class="l">vs LAL</td><td class="l"><span class="wl L">L</span></td>
+            <td>120-123</td><td class="neg">-3.2</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Dec 2</td><td class="l">vs POR</td><td class="l"><span class="wl W">W</span></td>
+            <td>121-118</td><td class="pos">+2.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 30</td><td class="l">at NY</td><td class="l"><span class="wl L">L</span></td>
+            <td>94-116</td><td class="neg">-23.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 29</td><td class="l">at CHA</td><td class="l"><span class="wl L">L</span></td>
+            <td>111-118</td><td class="neg">-7.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 26</td><td class="l">vs IND</td><td class="l"><span class="wl W">W</span></td>
+            <td>97-95</td><td class="pos">+2.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 24</td><td class="l">vs CLE</td><td class="l"><span class="wl W">W</span></td>
+            <td>110-99</td><td class="pos">+10.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 23</td><td class="l">vs BKN</td><td class="l"><span class="wl W">W</span></td>
+            <td>119-109</td><td class="pos">+10.5</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 21</td><td class="l">vs WSH</td><td class="l"><span class="wl W">W</span></td>
+            <td>140-110</td><td class="pos">+29.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 19</td><td class="l">at PHI</td><td class="l"><span class="wl W">W</span></td>
+            <td>121-112</td><td class="pos">+9.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 17</td><td class="l">vs CHA</td><td class="l"><span class="wl W">W</span></td>
+            <td>110-108</td><td class="pos">+2.0</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 15</td><td class="l">at IND</td><td class="l"><span class="wl W">W</span></td>
+            <td>129-111</td><td class="pos">+16.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 13</td><td class="l">at CLE</td><td class="l"><span class="wl W">W</span></td>
+            <td>126-113</td><td class="pos">+13.5</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 11</td><td class="l">at BKN</td><td class="l"><span class="wl W">W</span></td>
+            <td>119-109</td><td class="pos">+10.4</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 8</td><td class="l">at PHI</td><td class="l"><span class="wl L">L</span></td>
+            <td>120-130</td><td class="neg">-9.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 7</td><td class="l">at ATL</td><td class="l"><span class="wl W">W</span></td>
+            <td>109-97</td><td class="pos">+12.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 4</td><td class="l">vs MIL</td><td class="l"><span class="wl W">W</span></td>
+            <td>128-100</td><td class="pos">+27.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Nov 2</td><td class="l">vs MEM</td><td class="l"><span class="wl W">W</span></td>
+            <td>117-104</td><td class="pos">+13.5</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Oct 31</td><td class="l">at CLE</td><td class="l"><span class="wl W">W</span></td>
+            <td>112-101</td><td class="pos">+11.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Oct 29</td><td class="l">vs HOU</td><td class="l"><span class="wl L">L</span></td>
+            <td>121-139</td><td class="neg">-18.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Oct 27</td><td class="l">at SA</td><td class="l"><span class="wl L">L</span></td>
+            <td>103-121</td><td class="neg">-18.3</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Oct 26</td><td class="l">at DAL</td><td class="l"><span class="wl L">L</span></td>
+            <td>129-139</td><td class="neg">-9.1</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Oct 24</td><td class="l">vs MIL</td><td class="l"><span class="wl L">L</span></td>
+            <td>116-122</td><td class="neg">-5.7</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+          <tr><td class="l dim">Oct 22</td><td class="l">at ATL</td><td class="l"><span class="wl W">W</span></td>
+            <td>138-118</td><td class="pos">+17.9</td>
+            <td class="l"><span class="dim">–</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+</details>
+  </section>
+
+  <section aria-labelledby="sq">
+    <div class="head"><p class="eyebrow">Your turn</p><h2 id="sq">Questions for the season write-up</h2></div>
+    <div class="plate"><ol class="questions"><li>The Raptors have -2.1 more wins than their points scored and allowed predict (Pythagorean record). What explains the gap: close-game results, blowouts, or randomness? Teams usually drift back toward their Pythagorean record. How much would you expect them to?</li><li>Which of the four factors is this team&#39;s identity on offense, and on defense? Check the league ranks. Has that changed since last season, and why (roster, scheme)?</li><li>Pick one player whose last 10 games differ from his season numbers. Is it role (minutes, usage) or efficiency? How many more games would you need before you believed it?</li></ol></div>
+  </section>
+
+  <section aria-labelledby="next">
+    <div class="head"><p class="eyebrow">Schedule</p><h2 id="next">Coming up</h2></div>
+    <div class="cols">
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th class="l">Checkpoint</th><th>Game</th><th class="l">Date</th></tr></thead>
+          <tbody><tr><td class="l strong">Quarter mark</td><td>21</td><td class="l">Nov 30 · at NY</td></tr><tr><td class="l strong">Halfway</td><td>41</td><td class="l">Jan 12 · vs PHI</td></tr><tr><td class="l strong">Three-quarter mark</td><td>62</td><td class="l">Mar 5 · at MIN</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+<p>Charts to post: <a href="img/season/rolling.png">rolling.png</a> · <a href="img/season/league.png">league.png</a></p>    <p>Ratings use Basketball-Reference's possession estimate and count regular-season games only (the NBA Cup final is excluded, as in the standings).</p>
+    <p>Data: ESPN via sportsdataverse · Built 2026-09-28 18:20</p>
+  </footer>
+</main>
+<script type="application/json" id="spec-rolling">{"light":{"config":{"view":{"continuousWidth":300,"continuousHeight":300,"stroke":null},"axis":{"labelColor":"#85848f","titleColor":"#55545c","gridColor":"#ebeaef","domainColor":"#c9c8d0","tickColor":"#c9c8d0","labelFontSize":11,"titleFontSize":11,"titleFontWeight":500,"gridWidth":1,"domainWidth":1,"labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titlePadding":8},"background":"#ffffff","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","legend":{"labelColor":"#55545c","titleColor":"#55545c","labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","labelFontSize":12,"symbolStrokeWidth":2},"padding":{"left":4,"right":12,"top":8,"bottom":4},"text":{"color":"#55545c","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","fontSize":11},"title":{"color":"#141417","subtitleColor":"#55545c","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","subtitleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","anchor":"start","fontSize":18,"fontWeight":600,"subtitleFontSize":12,"subtitlePadding":6,"offset":14}},"layer":[{"data":{"name":"data-ec984d218672496d7c49cceae0722ecf"},"mark":{"type":"rule","color":"#c9c8d0"},"encoding":{"y":{"field":"z","type":"quantitative"}}},{"data":{"name":"data-e7083be5fda4f5e7a83816126524ce28"},"mark":{"type":"bar","cornerRadius":1,"opacity":0.55,"size":4},"encoding":{"color":{"field":"series","legend":{"direction":"horizontal","orient":"top-left","symbolType":"stroke","title":null},"scale":{"domain":["Single game","Last 10 games"],"range":["#8b8a95","#CE1141"]},"type":"nominal"},"tooltip":[{"field":"game_no","title":"Game","type":"quantitative"},{"field":"game_date","title":"Date","type":"nominal"},{"field":"matchup","title":"Opponent","type":"nominal"},{"field":"result","title":"Result","type":"nominal"},{"field":"net_s","title":"Net rating","type":"nominal"},{"field":"roll_s","title":"Last 10","type":"nominal"}],"x":{"axis":{"domain":false,"grid":false,"labelFlush":true,"tickMinStep":1},"field":"game_no","scale":{"domain":[0.5,82.5],"nice":false},"title":"Game","type":"quantitative"},"y":{"axis":{"domain":false,"labelExpr":"(datum.value > 0 ? '+' : '') + format(datum.value, 'd')","tickCount":5,"ticks":false},"field":"net","scale":{"domain":[-50,50]},"title":"Net rating (points per 100 possessions)","type":"quantitative"}},"transform":[{"calculate":"'Single game'","as":"series"}]},{"data":{"name":"data-e7083be5fda4f5e7a83816126524ce28"},"mark":{"type":"line","interpolate":"monotone","strokeWidth":2.5},"encoding":{"color":{"field":"series","legend":{"direction":"horizontal","orient":"top-left","symbolType":"stroke","title":null},"scale":{"domain":["Single game","Last 10 games"],"range":["#8b8a95","#CE1141"]},"type":"nominal"},"tooltip":[{"field":"game_no","title":"Game","type":"quantitative"},{"field":"game_date","title":"Date","type":"nominal"},{"field":"matchup","title":"Opponent","type":"nominal"},{"field":"result","title":"Result","type":"nominal"},{"field":"net_s","title":"Net rating","type":"nominal"},{"field":"roll_s","title":"Last 10","type":"nominal"}],"x":{"field":"game_no","type":"quantitative"},"y":{"field":"roll_net","type":"quantitative"}},"transform":[{"calculate":"'Last 10 games'","as":"series"}]},{"data":{"name":"data-9bf3fc3596382284c22b8f30159938e8"},"mark":{"type":"point","color":"#CE1141","filled":true,"size":70,"stroke":"#ffffff","strokeWidth":2},"encoding":{"x":{"field":"game_no","type":"quantitative"},"y":{"field":"roll_net","type":"quantitative"}}},{"data":{"name":"data-9bf3fc3596382284c22b8f30159938e8"},"mark":{"type":"text","align":"left","color":"#141417","dx":8,"fontSize":12,"fontWeight":600},"encoding":{"text":{"field":"lbl","type":"nominal"},"x":{"field":"game_no","type":"quantitative"},"y":{"field":"roll_net","type":"quantitative"}}}],"height":240,"width":"container","$schema":"https://vega.github.io/schema/vega-lite/v6.4.1.json","datasets":{"data-ec984d218672496d7c49cceae0722ecf":[{"z":0}],"data-e7083be5fda4f5e7a83816126524ce28":[{"game_no":1,"game_date":"2025-10-22","opp_abbr":"ATL","home_away":"away","win":true,"pts":138,"opp_pts":118,"net":17.885574869675338,"roll_net":17.885574869675338,"matchup":"at ATL","result":"W 138-118","net_s":"+17.9","roll_s":"+17.9"},{"game_no":2,"game_date":"2025-10-24","opp_abbr":"MIL","home_away":"home","win":false,"pts":116,"opp_pts":122,"net":-5.74997895299272,"roll_net":6.476379355867053,"matchup":"vs MIL","result":"L 116-122","net_s":"-5.7","roll_s":"+6.5"},{"game_no":3,"game_date":"2025-10-26","opp_abbr":"DAL","home_away":"away","win":false,"pts":129,"opp_pts":139,"net":-9.080218190999062,"roll_net":1.2258669769311865,"matchup":"at DAL","result":"L 129-139","net_s":"-9.1","roll_s":"+1.2"},{"game_no":4,"game_date":"2025-10-27","opp_abbr":"SA","home_away":"away","win":false,"pts":103,"opp_pts":121,"net":-18.33449315704013,"roll_net":-3.2981896664038146,"matchup":"at SA","result":"L 103-121","net_s":"-18.3","roll_s":"-3.3"},{"game_no":5,"game_date":"2025-10-29","opp_abbr":"HOU","home_away":"home","win":false,"pts":121,"opp_pts":139,"net":-18.322795302384293,"roll_net":-6.121899596151323,"matchup":"vs HOU","result":"L 121-139","net_s":"-18.3","roll_s":"-6.1"},{"game_no":6,"game_date":"2025-10-31","opp_abbr":"CLE","home_away":"away","win":true,"pts":112,"opp_pts":101,"net":11.322625541073847,"roll_net":-3.3878389127535655,"matchup":"at CLE","result":"W 112-101","net_s":"+11.3","roll_s":"-3.4"},{"game_no":7,"game_date":"2025-11-02","opp_abbr":"MEM","home_away":"home","win":true,"pts":117,"opp_pts":104,"net":13.507163991978814,"roll_net":-1.117147734824627,"matchup":"vs MEM","result":"W 117-104","net_s":"+13.5","roll_s":"-1.1"},{"game_no":8,"game_date":"2025-11-04","opp_abbr":"MIL","home_away":"home","win":true,"pts":128,"opp_pts":100,"net":27.944642992928294,"roll_net":2.4500571153885318,"matchup":"vs MIL","result":"W 128-100","net_s":"+27.9","roll_s":"+2.5"},{"game_no":9,"game_date":"2025-11-07","opp_abbr":"ATL","home_away":"away","win":true,"pts":109,"opp_pts":97,"net":12.070436023545724,"roll_net":3.4945028674345906,"matchup":"at ATL","result":"W 109-97","net_s":"+12.1","roll_s":"+3.5"},{"game_no":10,"game_date":"2025-11-08","opp_abbr":"PHI","home_away":"away","win":false,"pts":120,"opp_pts":130,"net":-9.748632640915915,"roll_net":2.1604583255093956,"matchup":"at PHI","result":"L 120-130","net_s":"-9.7","roll_s":"+2.2"},{"game_no":11,"game_date":"2025-11-11","opp_abbr":"BKN","home_away":"away","win":true,"pts":119,"opp_pts":109,"net":10.35067562522869,"roll_net":1.1963003929448348,"matchup":"at BKN","result":"W 119-109","net_s":"+10.4","roll_s":"+1.2"},{"game_no":12,"game_date":"2025-11-13","opp_abbr":"CLE","home_away":"away","win":true,"pts":126,"opp_pts":113,"net":13.512354081097115,"roll_net":3.115726358859817,"matchup":"at CLE","result":"W 126-113","net_s":"+13.5","roll_s":"+3.1"},{"game_no":13,"game_date":"2025-11-15","opp_abbr":"IND","home_away":"away","win":true,"pts":129,"opp_pts":111,"net":16.733652503862828,"roll_net":5.945238845435924,"matchup":"at IND","result":"W 129-111","net_s":"+16.7","roll_s":"+5.9"},{"game_no":14,"game_date":"2025-11-17","opp_abbr":"CHA","home_away":"home","win":true,"pts":110,"opp_pts":108,"net":1.9787612954290665,"roll_net":7.937397286514852,"matchup":"vs CHA","result":"W 110-108","net_s":"+2.0","roll_s":"+7.9"},{"game_no":15,"game_date":"2025-11-19","opp_abbr":"PHI","home_away":"away","win":true,"pts":121,"opp_pts":112,"net":9.302767121452547,"roll_net":10.666177315059059,"matchup":"at PHI","result":"W 121-112","net_s":"+9.3","roll_s":"+10.7"},{"game_no":16,"game_date":"2025-11-21","opp_abbr":"WSH","home_away":"home","win":true,"pts":140,"opp_pts":110,"net":29.281385985603308,"roll_net":12.511270818235701,"matchup":"vs WSH","result":"W 140-110","net_s":"+29.3","roll_s":"+12.5"},{"game_no":17,"game_date":"2025-11-23","opp_abbr":"BKN","home_away":"home","win":true,"pts":119,"opp_pts":109,"net":10.466485441409489,"roll_net":12.219588242601134,"matchup":"vs BKN","result":"W 119-109","net_s":"+10.5","roll_s":"+12.2"},{"game_no":18,"game_date":"2025-11-24","opp_abbr":"CLE","home_away":"home","win":true,"pts":110,"opp_pts":99,"net":10.939677431391488,"roll_net":10.513138313554535,"matchup":"vs CLE","result":"W 110-99","net_s":"+10.9","roll_s":"+10.5"},{"game_no":19,"game_date":"2025-11-26","opp_abbr":"IND","home_away":"home","win":true,"pts":97,"opp_pts":95,"net":1.9813750743015675,"roll_net":9.497399256653168,"matchup":"vs IND","result":"W 97-95","net_s":"+2.0","roll_s":"+9.5"},{"game_no":20,"game_date":"2025-11-29","opp_abbr":"CHA","home_away":"away","win":false,"pts":111,"opp_pts":118,"net":-7.054441148619546,"roll_net":9.830241555286918,"matchup":"at CHA","result":"L 111-118","net_s":"-7.1","roll_s":"+9.8"},{"game_no":21,"game_date":"2025-11-30","opp_abbr":"NY","home_away":"away","win":false,"pts":94,"opp_pts":116,"net":-23.079437985652987,"roll_net":6.628938534650985,"matchup":"at NY","result":"L 94-116","net_s":"-23.1","roll_s":"+6.6"},{"game_no":22,"game_date":"2025-12-02","opp_abbr":"POR","home_away":"home","win":true,"pts":121,"opp_pts":118,"net":2.9078925049070676,"roll_net":5.58551252056985,"matchup":"vs POR","result":"W 121-118","net_s":"+2.9","roll_s":"+5.6"},{"game_no":23,"game_date":"2025-12-04","opp_abbr":"LAL","home_away":"home","win":false,"pts":120,"opp_pts":123,"net":-3.191753721168965,"roll_net":3.538862710631676,"matchup":"vs LAL","result":"L 120-123","net_s":"-3.2","roll_s":"+3.5"},{"game_no":24,"game_date":"2025-12-05","opp_abbr":"CHA","home_away":"home","win":false,"pts":86,"opp_pts":111,"net":-24.089208455361515,"roll_net":0.8066745195138054,"matchup":"vs CHA","result":"L 86-111","net_s":"-24.1","roll_s":"+0.8"},{"game_no":25,"game_date":"2025-12-07","opp_abbr":"BOS","home_away":"home","win":false,"pts":113,"opp_pts":121,"net":-8.506874664726993,"roll_net":-0.9099898111841043,"matchup":"vs BOS","result":"L 113-121","net_s":"-8.5","roll_s":"-0.9"},{"game_no":26,"game_date":"2025-12-09","opp_abbr":"NY","home_away":"home","win":false,"pts":101,"opp_pts":117,"net":-17.060438433772816,"roll_net":-5.6102291018489865,"matchup":"vs NY","result":"L 101-117","net_s":"-17.1","roll_s":"-5.6"},{"game_no":27,"game_date":"2025-12-15","opp_abbr":"MIA","home_away":"away","win":true,"pts":106,"opp_pts":96,"net":10.039466257353908,"roll_net":-5.587069139915769,"matchup":"at MIA","result":"W 106-96","net_s":"+10.0","roll_s":"-5.6"},{"game_no":28,"game_date":"2025-12-18","opp_abbr":"MIL","home_away":"away","win":true,"pts":111,"opp_pts":105,"net":6.246756683567128,"roll_net":-6.1229838858876064,"matchup":"at MIL","result":"W 111-105","net_s":"+6.2","roll_s":"-6.1"},{"game_no":29,"game_date":"2025-12-20","opp_abbr":"BOS","home_away":"home","win":false,"pts":96,"opp_pts":112,"net":-17.35968969246879,"roll_net":-8.031781694995146,"matchup":"vs BOS","result":"L 96-112","net_s":"-17.4","roll_s":"-8.0"},{"game_no":30,"game_date":"2025-12-21","opp_abbr":"BKN","home_away":"away","win":false,"pts":81,"opp_pts":96,"net":-15.767051602571371,"roll_net":-8.893036585765259,"matchup":"at BKN","result":"L 81-96","net_s":"-15.8","roll_s":"-8.9"},{"game_no":31,"game_date":"2025-12-23","opp_abbr":"MIA","home_away":"away","win":true,"pts":112,"opp_pts":91,"net":22.047372688088004,"roll_net":-4.4468562767117845,"matchup":"at MIA","result":"W 112-91","net_s":"+22.0","roll_s":"-4.4"},{"game_no":32,"game_date":"2025-12-26","opp_abbr":"WSH","home_away":"away","win":false,"pts":117,"opp_pts":138,"net":-20.168801404690413,"roll_net":-6.92199553549213,"matchup":"at WSH","result":"L 117-138","net_s":"-20.2","roll_s":"-6.9"},{"game_no":33,"game_date":"2025-12-28","opp_abbr":"GS","home_away":"home","win":true,"pts":141,"opp_pts":127,"net":12.599956818562319,"roll_net":-5.0758935099666616,"matchup":"vs GS","result":"W 141-127","net_s":"+12.6","roll_s":"-5.1"},{"game_no":34,"game_date":"2025-12-29","opp_abbr":"ORL","home_away":"home","win":true,"pts":107,"opp_pts":106,"net":1.072455842092964,"roll_net":-2.4627729611381426,"matchup":"vs ORL","result":"W 107-106","net_s":"+1.1","roll_s":"-2.5"},{"game_no":35,"game_date":"2025-12-31","opp_abbr":"DEN","home_away":"home","win":false,"pts":103,"opp_pts":106,"net":-3.1642725953719975,"roll_net":-1.948162074553423,"matchup":"vs DEN","result":"L 103-106","net_s":"-3.2","roll_s":"-1.9"},{"game_no":36,"game_date":"2026-01-03","opp_abbr":"ATL","home_away":"home","win":true,"pts":134,"opp_pts":117,"net":16.11017186856205,"roll_net":1.4184147578750554,"matchup":"vs ATL","result":"W 134-117","net_s":"+16.1","roll_s":"+1.4"},{"game_no":37,"game_date":"2026-01-05","opp_abbr":"ATL","home_away":"home","win":true,"pts":118,"opp_pts":100,"net":17.307027046218963,"roll_net":2.219051721800014,"matchup":"vs ATL","result":"W 118-100","net_s":"+17.3","roll_s":"+2.2"},{"game_no":38,"game_date":"2026-01-07","opp_abbr":"CHA","home_away":"away","win":true,"pts":97,"opp_pts":96,"net":1.1311880131651577,"roll_net":1.7280509905508978,"matchup":"at CHA","result":"W 97-96","net_s":"+1.1","roll_s":"+1.7"},{"game_no":39,"game_date":"2026-01-09","opp_abbr":"BOS","home_away":"away","win":false,"pts":117,"opp_pts":125,"net":-8.702323472118294,"roll_net":2.5418665952466313,"matchup":"at BOS","result":"L 117-125","net_s":"-8.7","roll_s":"+2.5"},{"game_no":40,"game_date":"2026-01-11","opp_abbr":"PHI","home_away":"home","win":true,"pts":116,"opp_pts":115,"net":0.9126685698848576,"roll_net":4.108369181399425,"matchup":"vs PHI","result":"W 116-115","net_s":"+0.9","roll_s":"+4.1"},{"game_no":41,"game_date":"2026-01-12","opp_abbr":"PHI","home_away":"home","win":false,"pts":102,"opp_pts":115,"net":-14.10572809322045,"roll_net":0.7036062696440553,"matchup":"vs PHI","result":"L 102-115","net_s":"-14.1","roll_s":"+0.7"},{"game_no":42,"game_date":"2026-01-14","opp_abbr":"IND","home_away":"away","win":true,"pts":115,"opp_pts":101,"net":14.491667406974344,"roll_net":4.253764941726985,"matchup":"at IND","result":"W 115-101","net_s":"+14.5","roll_s":"+4.3"},{"game_no":43,"game_date":"2026-01-16","opp_abbr":"LAC","home_away":"home","win":false,"pts":117,"opp_pts":121,"net":-3.9898088881542577,"roll_net":2.4577458220164203,"matchup":"vs LAC","result":"L 117-121","net_s":"-4.0","roll_s":"+2.5"},{"game_no":44,"game_date":"2026-01-18","opp_abbr":"LAL","home_away":"away","win":false,"pts":93,"opp_pts":110,"net":-17.695618369453925,"roll_net":0.6126640062732207,"matchup":"at LAL","result":"L 93-110","net_s":"-17.7","roll_s":"+0.6"},{"game_no":45,"game_date":"2026-01-20","opp_abbr":"GS","home_away":"away","win":true,"pts":145,"opp_pts":127,"net":17.50682520418094,"roll_net":2.7346254729592374,"matchup":"at GS","result":"W 145-127","net_s":"+17.5","roll_s":"+2.7"},{"game_no":46,"game_date":"2026-01-21","opp_abbr":"SAC","home_away":"away","win":true,"pts":122,"opp_pts":109,"net":13.195864872728833,"roll_net":2.346147676536617,"matchup":"at SAC","result":"W 122-109","net_s":"+13.2","roll_s":"+2.3"},{"game_no":47,"game_date":"2026-01-23","opp_abbr":"POR","home_away":"away","win":true,"pts":110,"opp_pts":98,"net":12.20227866145369,"roll_net":1.7441823416694149,"matchup":"at POR","result":"W 110-98","net_s":"+12.2","roll_s":"+1.7"},{"game_no":48,"game_date":"2026-01-25","opp_abbr":"OKC","home_away":"away","win":true,"pts":103,"opp_pts":101,"net":2.1459907771169213,"roll_net":1.8377414229794198,"matchup":"at OKC","result":"W 103-101","net_s":"+2.1","roll_s":"+1.8"},{"game_no":49,"game_date":"2026-01-28","opp_abbr":"NY","home_away":"home","win":false,"pts":92,"opp_pts":119,"net":-27.2469279193687,"roll_net":-0.1013553832853944,"matchup":"vs NY","result":"L 92-119","net_s":"-27.2","roll_s":"-0.1"},{"game_no":50,"game_date":"2026-01-30","opp_abbr":"ORL","home_away":"away","win":false,"pts":120,"opp_pts":130,"net":-9.788073446573321,"roll_net":-1.2254604509648885,"matchup":"at ORL","result":"L 120-130","net_s":"-9.8","roll_s":"-1.2"},{"game_no":51,"game_date":"2026-02-01","opp_abbr":"UTAH","home_away":"home","win":true,"pts":107,"opp_pts":100,"net":6.813718701192897,"roll_net":0.808246913648702,"matchup":"vs UTAH","result":"W 107-100","net_s":"+6.8","roll_s":"+0.8"},{"game_no":52,"game_date":"2026-02-04","opp_abbr":"MIN","home_away":"home","win":false,"pts":126,"opp_pts":128,"net":-1.959509991868046,"roll_net":-0.8038135854729092,"matchup":"vs MIN","result":"L 126-128","net_s":"-2.0","roll_s":"-0.8"},{"game_no":53,"game_date":"2026-02-05","opp_abbr":"CHI","home_away":"home","win":true,"pts":123,"opp_pts":107,"net":17.00720672332247,"roll_net":1.2132511643487476,"matchup":"vs CHI","result":"W 123-107","net_s":"+17.0","roll_s":"+1.2"},{"game_no":54,"game_date":"2026-02-08","opp_abbr":"IND","home_away":"home","win":true,"pts":122,"opp_pts":104,"net":17.38552062719583,"roll_net":4.7163022606473675,"matchup":"vs IND","result":"W 122-104","net_s":"+17.4","roll_s":"+4.7"},{"game_no":55,"game_date":"2026-02-11","opp_abbr":"DET","home_away":"home","win":false,"pts":95,"opp_pts":113,"net":-19.719517913899452,"roll_net":1.1167438971538246,"matchup":"vs DET","result":"L 95-113","net_s":"-19.7","roll_s":"+1.1"},{"game_no":56,"game_date":"2026-02-19","opp_abbr":"CHI","home_away":"away","win":true,"pts":110,"opp_pts":101,"net":8.666291266932248,"roll_net":0.7068269273492973,"matchup":"at CHI","result":"W 110-101","net_s":"+8.7","roll_s":"+0.7"},{"game_no":57,"game_date":"2026-02-22","opp_abbr":"MIL","home_away":"away","win":true,"pts":122,"opp_pts":94,"net":29.310622797584145,"roll_net":2.3290486820205416,"matchup":"at MIL","result":"W 122-94","net_s":"+29.3","roll_s":"+2.3"},{"game_no":58,"game_date":"2026-02-24","opp_abbr":"OKC","home_away":"home","win":false,"pts":107,"opp_pts":116,"net":-8.860980968082814,"roll_net":1.2049408520592095,"matchup":"vs OKC","result":"L 107-116","net_s":"-8.9","roll_s":"+1.2"},{"game_no":59,"game_date":"2026-02-25","opp_abbr":"SA","home_away":"home","win":false,"pts":107,"opp_pts":110,"net":-2.9884437000240354,"roll_net":3.6101355789742087,"matchup":"vs SA","result":"L 107-110","net_s":"-3.0","roll_s":"+3.6"},{"game_no":60,"game_date":"2026-02-28","opp_abbr":"WSH","home_away":"away","win":true,"pts":134,"opp_pts":125,"net":9.31131683122564,"roll_net":5.5461221581194025,"matchup":"at WSH","result":"W 134-125","net_s":"+9.3","roll_s":"+5.5"},{"game_no":61,"game_date":"2026-03-03","opp_abbr":"NY","home_away":"home","win":false,"pts":95,"opp_pts":111,"net":-16.8154020385051,"roll_net":3.251699295675081,"matchup":"vs NY","result":"L 95-111","net_s":"-16.8","roll_s":"+3.3"},{"game_no":62,"game_date":"2026-03-05","opp_abbr":"MIN","home_away":"away","win":false,"pts":107,"opp_pts":115,"net":-8.33768612767625,"roll_net":2.658529151334079,"matchup":"at MIN","result":"L 107-115","net_s":"-8.3","roll_s":"+2.7"},{"game_no":63,"game_date":"2026-03-08","opp_abbr":"DAL","home_away":"home","win":true,"pts":122,"opp_pts":92,"net":29.771473026829256,"roll_net":4.062257241284996,"matchup":"vs DAL","result":"W 122-92","net_s":"+29.8","roll_s":"+4.1"},{"game_no":64,"game_date":"2026-03-10","opp_abbr":"HOU","home_away":"away","win":false,"pts":99,"opp_pts":113,"net":-14.878351299688319,"roll_net":0.8203140602248311,"matchup":"at HOU","result":"L 99-113","net_s":"-14.9","roll_s":"+0.8"},{"game_no":65,"game_date":"2026-03-11","opp_abbr":"NO","home_away":"away","win":false,"pts":111,"opp_pts":122,"net":-10.931281532542883,"roll_net":1.5234848867798263,"matchup":"at NO","result":"L 111-122","net_s":"-10.9","roll_s":"+1.5"},{"game_no":66,"game_date":"2026-03-13","opp_abbr":"PHX","home_away":"home","win":true,"pts":122,"opp_pts":115,"net":7.213933196688458,"roll_net":1.3295580006020202,"matchup":"vs PHX","result":"W 122-115","net_s":"+7.2","roll_s":"+1.3"},{"game_no":67,"game_date":"2026-03-15","opp_abbr":"DET","home_away":"home","win":true,"pts":119,"opp_pts":108,"net":11.776862014073885,"roll_net":-0.4099858052128553,"matchup":"vs DET","result":"W 119-108","net_s":"+11.8","roll_s":"-0.4"},{"game_no":68,"game_date":"2026-03-18","opp_abbr":"CHI","home_away":"away","win":true,"pts":139,"opp_pts":109,"net":28.040565721184223,"roll_net":3.5675606798575785,"matchup":"at CHI","result":"W 139-109","net_s":"+28.0","roll_s":"+3.6"},{"game_no":69,"game_date":"2026-03-20","opp_abbr":"DEN","home_away":"away","win":false,"pts":115,"opp_pts":121,"net":-6.5053018923723585,"roll_net":3.2891076456602377,"matchup":"at DEN","result":"L 115-121","net_s":"-6.5","roll_s":"+3.3"},{"game_no":70,"game_date":"2026-03-22","opp_abbr":"PHX","home_away":"away","win":false,"pts":98,"opp_pts":120,"net":-23.098968090017863,"roll_net":0.1029342398133366,"matchup":"at PHX","result":"L 98-120","net_s":"-23.1","roll_s":"+0.1"},{"game_no":71,"game_date":"2026-03-23","opp_abbr":"UTAH","home_away":"away","win":true,"pts":143,"opp_pts":127,"net":14.733905187643217,"roll_net":3.3504706749421445,"matchup":"at UTAH","result":"W 143-127","net_s":"+14.7","roll_s":"+3.4"},{"game_no":72,"game_date":"2026-03-25","opp_abbr":"LAC","home_away":"away","win":false,"pts":94,"opp_pts":119,"net":-26.749907933921207,"roll_net":1.6285905140432249,"matchup":"at LAC","result":"L 94-119","net_s":"-26.7","roll_s":"+1.6"},{"game_no":73,"game_date":"2026-03-27","opp_abbr":"NO","home_away":"home","win":true,"pts":119,"opp_pts":106,"net":13.139496992075166,"roll_net":-0.1019767830752869,"matchup":"vs NO","result":"W 119-106","net_s":"+13.1","roll_s":"-0.1"},{"game_no":74,"game_date":"2026-03-29","opp_abbr":"ORL","home_away":"home","win":true,"pts":139,"opp_pts":87,"net":49.07709203264237,"roll_net":6.549285586296634,"matchup":"vs ORL","result":"W 139-87","net_s":"+49.1","roll_s":"+6.5"},{"game_no":75,"game_date":"2026-03-31","opp_abbr":"DET","home_away":"away","win":false,"pts":116,"opp_pts":127,"net":-11.176835945546998,"roll_net":6.563907138290432,"matchup":"at DET","result":"L 116-127","net_s":"-11.2","roll_s":"+6.6"},{"game_no":76,"game_date":"2026-04-01","opp_abbr":"SAC","home_away":"home","win":false,"pts":115,"opp_pts":123,"net":-8.385971861552363,"roll_net":5.057520070543433,"matchup":"vs SAC","result":"L 115-123","net_s":"-8.4","roll_s":"+5.1"},{"game_no":77,"game_date":"2026-04-03","opp_abbr":"MEM","home_away":"away","win":true,"pts":128,"opp_pts":96,"net":32.09912841780536,"roll_net":7.136291506564902,"matchup":"at MEM","result":"W 128-96","net_s":"+32.1","roll_s":"+7.1"},{"game_no":78,"game_date":"2026-04-05","opp_abbr":"BOS","home_away":"away","win":false,"pts":101,"opp_pts":115,"net":-14.217657573741278,"roll_net":2.7372380358750945,"matchup":"at BOS","result":"L 101-115","net_s":"-14.2","roll_s":"+2.7"},{"game_no":79,"game_date":"2026-04-07","opp_abbr":"MIA","home_away":"home","win":true,"pts":121,"opp_pts":95,"net":25.68486957044236,"roll_net":5.927323700297521,"matchup":"vs MIA","result":"W 121-95","net_s":"+25.7","roll_s":"+5.9"},{"game_no":80,"game_date":"2026-04-09","opp_abbr":"MIA","home_away":"home","win":true,"pts":128,"opp_pts":114,"net":14.740435341579115,"roll_net":9.546542207955923,"matchup":"vs MIA","result":"W 128-114","net_s":"+14.7","roll_s":"+9.5"},{"game_no":81,"game_date":"2026-04-10","opp_abbr":"NY","home_away":"away","win":false,"pts":95,"opp_pts":112,"net":-18.51541554959786,"roll_net":6.337219693814106,"matchup":"at NY","result":"L 95-112","net_s":"-18.5","roll_s":"+6.3"},{"game_no":82,"game_date":"2026-04-12","opp_abbr":"BKN","home_away":"home","win":true,"pts":136,"opp_pts":101,"net":35.26621357209433,"roll_net":12.396687260487397,"matchup":"vs BKN","result":"W 136-101","net_s":"+35.3","roll_s":"+12.4"}],"data-9bf3fc3596382284c22b8f30159938e8":[{"game_no":82,"game_date":"2026-04-12","opp_abbr":"BKN","home_away":"home","win":true,"pts":136,"opp_pts":101,"net":35.26621357209433,"roll_net":12.396687260487397,"matchup":"vs BKN","result":"W 136-101","net_s":"+35.3","roll_s":"+12.4","lbl":"+12.4"}]}},"dark":{"config":{"view":{"continuousWidth":300,"continuousHeight":300,"stroke":null},"axis":{"labelColor":"#8f8e97","titleColor":"#c5c4cc","gridColor":"#2a2a30","domainColor":"#3b3b42","tickColor":"#3b3b42","labelFontSize":11,"titleFontSize":11,"titleFontWeight":500,"gridWidth":1,"domainWidth":1,"labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titlePadding":8},"background":"#1b1b1f","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","legend":{"labelColor":"#c5c4cc","titleColor":"#c5c4cc","labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","labelFontSize":12,"symbolStrokeWidth":2},"padding":{"left":4,"right":12,"top":8,"bottom":4},"text":{"color":"#c5c4cc","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","fontSize":11},"title":{"color":"#f3f3f5","subtitleColor":"#c5c4cc","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","subtitleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","anchor":"start","fontSize":18,"fontWeight":600,"subtitleFontSize":12,"subtitlePadding":6,"offset":14}},"layer":[{"data":{"name":"data-ec984d218672496d7c49cceae0722ecf"},"mark":{"type":"rule","color":"#3b3b42"},"encoding":{"y":{"field":"z","type":"quantitative"}}},{"data":{"name":"data-e7083be5fda4f5e7a83816126524ce28"},"mark":{"type":"bar","cornerRadius":1,"opacity":0.55,"size":4},"encoding":{"color":{"field":"series","legend":{"direction":"horizontal","orient":"top-left","symbolType":"stroke","title":null},"scale":{"domain":["Single game","Last 10 games"],"range":["#8e8d98","#ee3d5a"]},"type":"nominal"},"tooltip":[{"field":"game_no","title":"Game","type":"quantitative"},{"field":"game_date","title":"Date","type":"nominal"},{"field":"matchup","title":"Opponent","type":"nominal"},{"field":"result","title":"Result","type":"nominal"},{"field":"net_s","title":"Net rating","type":"nominal"},{"field":"roll_s","title":"Last 10","type":"nominal"}],"x":{"axis":{"domain":false,"grid":false,"labelFlush":true,"tickMinStep":1},"field":"game_no","scale":{"domain":[0.5,82.5],"nice":false},"title":"Game","type":"quantitative"},"y":{"axis":{"domain":false,"labelExpr":"(datum.value > 0 ? '+' : '') + format(datum.value, 'd')","tickCount":5,"ticks":false},"field":"net","scale":{"domain":[-50,50]},"title":"Net rating (points per 100 possessions)","type":"quantitative"}},"transform":[{"calculate":"'Single game'","as":"series"}]},{"data":{"name":"data-e7083be5fda4f5e7a83816126524ce28"},"mark":{"type":"line","interpolate":"monotone","strokeWidth":2.5},"encoding":{"color":{"field":"series","legend":{"direction":"horizontal","orient":"top-left","symbolType":"stroke","title":null},"scale":{"domain":["Single game","Last 10 games"],"range":["#8e8d98","#ee3d5a"]},"type":"nominal"},"tooltip":[{"field":"game_no","title":"Game","type":"quantitative"},{"field":"game_date","title":"Date","type":"nominal"},{"field":"matchup","title":"Opponent","type":"nominal"},{"field":"result","title":"Result","type":"nominal"},{"field":"net_s","title":"Net rating","type":"nominal"},{"field":"roll_s","title":"Last 10","type":"nominal"}],"x":{"field":"game_no","type":"quantitative"},"y":{"field":"roll_net","type":"quantitative"}},"transform":[{"calculate":"'Last 10 games'","as":"series"}]},{"data":{"name":"data-9bf3fc3596382284c22b8f30159938e8"},"mark":{"type":"point","color":"#ee3d5a","filled":true,"size":70,"stroke":"#1b1b1f","strokeWidth":2},"encoding":{"x":{"field":"game_no","type":"quantitative"},"y":{"field":"roll_net","type":"quantitative"}}},{"data":{"name":"data-9bf3fc3596382284c22b8f30159938e8"},"mark":{"type":"text","align":"left","color":"#f3f3f5","dx":8,"fontSize":12,"fontWeight":600},"encoding":{"text":{"field":"lbl","type":"nominal"},"x":{"field":"game_no","type":"quantitative"},"y":{"field":"roll_net","type":"quantitative"}}}],"height":240,"width":"container","$schema":"https://vega.github.io/schema/vega-lite/v6.4.1.json","datasets":{"data-ec984d218672496d7c49cceae0722ecf":[{"z":0}],"data-e7083be5fda4f5e7a83816126524ce28":[{"game_no":1,"game_date":"2025-10-22","opp_abbr":"ATL","home_away":"away","win":true,"pts":138,"opp_pts":118,"net":17.885574869675338,"roll_net":17.885574869675338,"matchup":"at ATL","result":"W 138-118","net_s":"+17.9","roll_s":"+17.9"},{"game_no":2,"game_date":"2025-10-24","opp_abbr":"MIL","home_away":"home","win":false,"pts":116,"opp_pts":122,"net":-5.74997895299272,"roll_net":6.476379355867053,"matchup":"vs MIL","result":"L 116-122","net_s":"-5.7","roll_s":"+6.5"},{"game_no":3,"game_date":"2025-10-26","opp_abbr":"DAL","home_away":"away","win":false,"pts":129,"opp_pts":139,"net":-9.080218190999062,"roll_net":1.2258669769311865,"matchup":"at DAL","result":"L 129-139","net_s":"-9.1","roll_s":"+1.2"},{"game_no":4,"game_date":"2025-10-27","opp_abbr":"SA","home_away":"away","win":false,"pts":103,"opp_pts":121,"net":-18.33449315704013,"roll_net":-3.2981896664038146,"matchup":"at SA","result":"L 103-121","net_s":"-18.3","roll_s":"-3.3"},{"game_no":5,"game_date":"2025-10-29","opp_abbr":"HOU","home_away":"home","win":false,"pts":121,"opp_pts":139,"net":-18.322795302384293,"roll_net":-6.121899596151323,"matchup":"vs HOU","result":"L 121-139","net_s":"-18.3","roll_s":"-6.1"},{"game_no":6,"game_date":"2025-10-31","opp_abbr":"CLE","home_away":"away","win":true,"pts":112,"opp_pts":101,"net":11.322625541073847,"roll_net":-3.3878389127535655,"matchup":"at CLE","result":"W 112-101","net_s":"+11.3","roll_s":"-3.4"},{"game_no":7,"game_date":"2025-11-02","opp_abbr":"MEM","home_away":"home","win":true,"pts":117,"opp_pts":104,"net":13.507163991978814,"roll_net":-1.117147734824627,"matchup":"vs MEM","result":"W 117-104","net_s":"+13.5","roll_s":"-1.1"},{"game_no":8,"game_date":"2025-11-04","opp_abbr":"MIL","home_away":"home","win":true,"pts":128,"opp_pts":100,"net":27.944642992928294,"roll_net":2.4500571153885318,"matchup":"vs MIL","result":"W 128-100","net_s":"+27.9","roll_s":"+2.5"},{"game_no":9,"game_date":"2025-11-07","opp_abbr":"ATL","home_away":"away","win":true,"pts":109,"opp_pts":97,"net":12.070436023545724,"roll_net":3.4945028674345906,"matchup":"at ATL","result":"W 109-97","net_s":"+12.1","roll_s":"+3.5"},{"game_no":10,"game_date":"2025-11-08","opp_abbr":"PHI","home_away":"away","win":false,"pts":120,"opp_pts":130,"net":-9.748632640915915,"roll_net":2.1604583255093956,"matchup":"at PHI","result":"L 120-130","net_s":"-9.7","roll_s":"+2.2"},{"game_no":11,"game_date":"2025-11-11","opp_abbr":"BKN","home_away":"away","win":true,"pts":119,"opp_pts":109,"net":10.35067562522869,"roll_net":1.1963003929448348,"matchup":"at BKN","result":"W 119-109","net_s":"+10.4","roll_s":"+1.2"},{"game_no":12,"game_date":"2025-11-13","opp_abbr":"CLE","home_away":"away","win":true,"pts":126,"opp_pts":113,"net":13.512354081097115,"roll_net":3.115726358859817,"matchup":"at CLE","result":"W 126-113","net_s":"+13.5","roll_s":"+3.1"},{"game_no":13,"game_date":"2025-11-15","opp_abbr":"IND","home_away":"away","win":true,"pts":129,"opp_pts":111,"net":16.733652503862828,"roll_net":5.945238845435924,"matchup":"at IND","result":"W 129-111","net_s":"+16.7","roll_s":"+5.9"},{"game_no":14,"game_date":"2025-11-17","opp_abbr":"CHA","home_away":"home","win":true,"pts":110,"opp_pts":108,"net":1.9787612954290665,"roll_net":7.937397286514852,"matchup":"vs CHA","result":"W 110-108","net_s":"+2.0","roll_s":"+7.9"},{"game_no":15,"game_date":"2025-11-19","opp_abbr":"PHI","home_away":"away","win":true,"pts":121,"opp_pts":112,"net":9.302767121452547,"roll_net":10.666177315059059,"matchup":"at PHI","result":"W 121-112","net_s":"+9.3","roll_s":"+10.7"},{"game_no":16,"game_date":"2025-11-21","opp_abbr":"WSH","home_away":"home","win":true,"pts":140,"opp_pts":110,"net":29.281385985603308,"roll_net":12.511270818235701,"matchup":"vs WSH","result":"W 140-110","net_s":"+29.3","roll_s":"+12.5"},{"game_no":17,"game_date":"2025-11-23","opp_abbr":"BKN","home_away":"home","win":true,"pts":119,"opp_pts":109,"net":10.466485441409489,"roll_net":12.219588242601134,"matchup":"vs BKN","result":"W 119-109","net_s":"+10.5","roll_s":"+12.2"},{"game_no":18,"game_date":"2025-11-24","opp_abbr":"CLE","home_away":"home","win":true,"pts":110,"opp_pts":99,"net":10.939677431391488,"roll_net":10.513138313554535,"matchup":"vs CLE","result":"W 110-99","net_s":"+10.9","roll_s":"+10.5"},{"game_no":19,"game_date":"2025-11-26","opp_abbr":"IND","home_away":"home","win":true,"pts":97,"opp_pts":95,"net":1.9813750743015675,"roll_net":9.497399256653168,"matchup":"vs IND","result":"W 97-95","net_s":"+2.0","roll_s":"+9.5"},{"game_no":20,"game_date":"2025-11-29","opp_abbr":"CHA","home_away":"away","win":false,"pts":111,"opp_pts":118,"net":-7.054441148619546,"roll_net":9.830241555286918,"matchup":"at CHA","result":"L 111-118","net_s":"-7.1","roll_s":"+9.8"},{"game_no":21,"game_date":"2025-11-30","opp_abbr":"NY","home_away":"away","win":false,"pts":94,"opp_pts":116,"net":-23.079437985652987,"roll_net":6.628938534650985,"matchup":"at NY","result":"L 94-116","net_s":"-23.1","roll_s":"+6.6"},{"game_no":22,"game_date":"2025-12-02","opp_abbr":"POR","home_away":"home","win":true,"pts":121,"opp_pts":118,"net":2.9078925049070676,"roll_net":5.58551252056985,"matchup":"vs POR","result":"W 121-118","net_s":"+2.9","roll_s":"+5.6"},{"game_no":23,"game_date":"2025-12-04","opp_abbr":"LAL","home_away":"home","win":false,"pts":120,"opp_pts":123,"net":-3.191753721168965,"roll_net":3.538862710631676,"matchup":"vs LAL","result":"L 120-123","net_s":"-3.2","roll_s":"+3.5"},{"game_no":24,"game_date":"2025-12-05","opp_abbr":"CHA","home_away":"home","win":false,"pts":86,"opp_pts":111,"net":-24.089208455361515,"roll_net":0.8066745195138054,"matchup":"vs CHA","result":"L 86-111","net_s":"-24.1","roll_s":"+0.8"},{"game_no":25,"game_date":"2025-12-07","opp_abbr":"BOS","home_away":"home","win":false,"pts":113,"opp_pts":121,"net":-8.506874664726993,"roll_net":-0.9099898111841043,"matchup":"vs BOS","result":"L 113-121","net_s":"-8.5","roll_s":"-0.9"},{"game_no":26,"game_date":"2025-12-09","opp_abbr":"NY","home_away":"home","win":false,"pts":101,"opp_pts":117,"net":-17.060438433772816,"roll_net":-5.6102291018489865,"matchup":"vs NY","result":"L 101-117","net_s":"-17.1","roll_s":"-5.6"},{"game_no":27,"game_date":"2025-12-15","opp_abbr":"MIA","home_away":"away","win":true,"pts":106,"opp_pts":96,"net":10.039466257353908,"roll_net":-5.587069139915769,"matchup":"at MIA","result":"W 106-96","net_s":"+10.0","roll_s":"-5.6"},{"game_no":28,"game_date":"2025-12-18","opp_abbr":"MIL","home_away":"away","win":true,"pts":111,"opp_pts":105,"net":6.246756683567128,"roll_net":-6.1229838858876064,"matchup":"at MIL","result":"W 111-105","net_s":"+6.2","roll_s":"-6.1"},{"game_no":29,"game_date":"2025-12-20","opp_abbr":"BOS","home_away":"home","win":false,"pts":96,"opp_pts":112,"net":-17.35968969246879,"roll_net":-8.031781694995146,"matchup":"vs BOS","result":"L 96-112","net_s":"-17.4","roll_s":"-8.0"},{"game_no":30,"game_date":"2025-12-21","opp_abbr":"BKN","home_away":"away","win":false,"pts":81,"opp_pts":96,"net":-15.767051602571371,"roll_net":-8.893036585765259,"matchup":"at BKN","result":"L 81-96","net_s":"-15.8","roll_s":"-8.9"},{"game_no":31,"game_date":"2025-12-23","opp_abbr":"MIA","home_away":"away","win":true,"pts":112,"opp_pts":91,"net":22.047372688088004,"roll_net":-4.4468562767117845,"matchup":"at MIA","result":"W 112-91","net_s":"+22.0","roll_s":"-4.4"},{"game_no":32,"game_date":"2025-12-26","opp_abbr":"WSH","home_away":"away","win":false,"pts":117,"opp_pts":138,"net":-20.168801404690413,"roll_net":-6.92199553549213,"matchup":"at WSH","result":"L 117-138","net_s":"-20.2","roll_s":"-6.9"},{"game_no":33,"game_date":"2025-12-28","opp_abbr":"GS","home_away":"home","win":true,"pts":141,"opp_pts":127,"net":12.599956818562319,"roll_net":-5.0758935099666616,"matchup":"vs GS","result":"W 141-127","net_s":"+12.6","roll_s":"-5.1"},{"game_no":34,"game_date":"2025-12-29","opp_abbr":"ORL","home_away":"home","win":true,"pts":107,"opp_pts":106,"net":1.072455842092964,"roll_net":-2.4627729611381426,"matchup":"vs ORL","result":"W 107-106","net_s":"+1.1","roll_s":"-2.5"},{"game_no":35,"game_date":"2025-12-31","opp_abbr":"DEN","home_away":"home","win":false,"pts":103,"opp_pts":106,"net":-3.1642725953719975,"roll_net":-1.948162074553423,"matchup":"vs DEN","result":"L 103-106","net_s":"-3.2","roll_s":"-1.9"},{"game_no":36,"game_date":"2026-01-03","opp_abbr":"ATL","home_away":"home","win":true,"pts":134,"opp_pts":117,"net":16.11017186856205,"roll_net":1.4184147578750554,"matchup":"vs ATL","result":"W 134-117","net_s":"+16.1","roll_s":"+1.4"},{"game_no":37,"game_date":"2026-01-05","opp_abbr":"ATL","home_away":"home","win":true,"pts":118,"opp_pts":100,"net":17.307027046218963,"roll_net":2.219051721800014,"matchup":"vs ATL","result":"W 118-100","net_s":"+17.3","roll_s":"+2.2"},{"game_no":38,"game_date":"2026-01-07","opp_abbr":"CHA","home_away":"away","win":true,"pts":97,"opp_pts":96,"net":1.1311880131651577,"roll_net":1.7280509905508978,"matchup":"at CHA","result":"W 97-96","net_s":"+1.1","roll_s":"+1.7"},{"game_no":39,"game_date":"2026-01-09","opp_abbr":"BOS","home_away":"away","win":false,"pts":117,"opp_pts":125,"net":-8.702323472118294,"roll_net":2.5418665952466313,"matchup":"at BOS","result":"L 117-125","net_s":"-8.7","roll_s":"+2.5"},{"game_no":40,"game_date":"2026-01-11","opp_abbr":"PHI","home_away":"home","win":true,"pts":116,"opp_pts":115,"net":0.9126685698848576,"roll_net":4.108369181399425,"matchup":"vs PHI","result":"W 116-115","net_s":"+0.9","roll_s":"+4.1"},{"game_no":41,"game_date":"2026-01-12","opp_abbr":"PHI","home_away":"home","win":false,"pts":102,"opp_pts":115,"net":-14.10572809322045,"roll_net":0.7036062696440553,"matchup":"vs PHI","result":"L 102-115","net_s":"-14.1","roll_s":"+0.7"},{"game_no":42,"game_date":"2026-01-14","opp_abbr":"IND","home_away":"away","win":true,"pts":115,"opp_pts":101,"net":14.491667406974344,"roll_net":4.253764941726985,"matchup":"at IND","result":"W 115-101","net_s":"+14.5","roll_s":"+4.3"},{"game_no":43,"game_date":"2026-01-16","opp_abbr":"LAC","home_away":"home","win":false,"pts":117,"opp_pts":121,"net":-3.9898088881542577,"roll_net":2.4577458220164203,"matchup":"vs LAC","result":"L 117-121","net_s":"-4.0","roll_s":"+2.5"},{"game_no":44,"game_date":"2026-01-18","opp_abbr":"LAL","home_away":"away","win":false,"pts":93,"opp_pts":110,"net":-17.695618369453925,"roll_net":0.6126640062732207,"matchup":"at LAL","result":"L 93-110","net_s":"-17.7","roll_s":"+0.6"},{"game_no":45,"game_date":"2026-01-20","opp_abbr":"GS","home_away":"away","win":true,"pts":145,"opp_pts":127,"net":17.50682520418094,"roll_net":2.7346254729592374,"matchup":"at GS","result":"W 145-127","net_s":"+17.5","roll_s":"+2.7"},{"game_no":46,"game_date":"2026-01-21","opp_abbr":"SAC","home_away":"away","win":true,"pts":122,"opp_pts":109,"net":13.195864872728833,"roll_net":2.346147676536617,"matchup":"at SAC","result":"W 122-109","net_s":"+13.2","roll_s":"+2.3"},{"game_no":47,"game_date":"2026-01-23","opp_abbr":"POR","home_away":"away","win":true,"pts":110,"opp_pts":98,"net":12.20227866145369,"roll_net":1.7441823416694149,"matchup":"at POR","result":"W 110-98","net_s":"+12.2","roll_s":"+1.7"},{"game_no":48,"game_date":"2026-01-25","opp_abbr":"OKC","home_away":"away","win":true,"pts":103,"opp_pts":101,"net":2.1459907771169213,"roll_net":1.8377414229794198,"matchup":"at OKC","result":"W 103-101","net_s":"+2.1","roll_s":"+1.8"},{"game_no":49,"game_date":"2026-01-28","opp_abbr":"NY","home_away":"home","win":false,"pts":92,"opp_pts":119,"net":-27.2469279193687,"roll_net":-0.1013553832853944,"matchup":"vs NY","result":"L 92-119","net_s":"-27.2","roll_s":"-0.1"},{"game_no":50,"game_date":"2026-01-30","opp_abbr":"ORL","home_away":"away","win":false,"pts":120,"opp_pts":130,"net":-9.788073446573321,"roll_net":-1.2254604509648885,"matchup":"at ORL","result":"L 120-130","net_s":"-9.8","roll_s":"-1.2"},{"game_no":51,"game_date":"2026-02-01","opp_abbr":"UTAH","home_away":"home","win":true,"pts":107,"opp_pts":100,"net":6.813718701192897,"roll_net":0.808246913648702,"matchup":"vs UTAH","result":"W 107-100","net_s":"+6.8","roll_s":"+0.8"},{"game_no":52,"game_date":"2026-02-04","opp_abbr":"MIN","home_away":"home","win":false,"pts":126,"opp_pts":128,"net":-1.959509991868046,"roll_net":-0.8038135854729092,"matchup":"vs MIN","result":"L 126-128","net_s":"-2.0","roll_s":"-0.8"},{"game_no":53,"game_date":"2026-02-05","opp_abbr":"CHI","home_away":"home","win":true,"pts":123,"opp_pts":107,"net":17.00720672332247,"roll_net":1.2132511643487476,"matchup":"vs CHI","result":"W 123-107","net_s":"+17.0","roll_s":"+1.2"},{"game_no":54,"game_date":"2026-02-08","opp_abbr":"IND","home_away":"home","win":true,"pts":122,"opp_pts":104,"net":17.38552062719583,"roll_net":4.7163022606473675,"matchup":"vs IND","result":"W 122-104","net_s":"+17.4","roll_s":"+4.7"},{"game_no":55,"game_date":"2026-02-11","opp_abbr":"DET","home_away":"home","win":false,"pts":95,"opp_pts":113,"net":-19.719517913899452,"roll_net":1.1167438971538246,"matchup":"vs DET","result":"L 95-113","net_s":"-19.7","roll_s":"+1.1"},{"game_no":56,"game_date":"2026-02-19","opp_abbr":"CHI","home_away":"away","win":true,"pts":110,"opp_pts":101,"net":8.666291266932248,"roll_net":0.7068269273492973,"matchup":"at CHI","result":"W 110-101","net_s":"+8.7","roll_s":"+0.7"},{"game_no":57,"game_date":"2026-02-22","opp_abbr":"MIL","home_away":"away","win":true,"pts":122,"opp_pts":94,"net":29.310622797584145,"roll_net":2.3290486820205416,"matchup":"at MIL","result":"W 122-94","net_s":"+29.3","roll_s":"+2.3"},{"game_no":58,"game_date":"2026-02-24","opp_abbr":"OKC","home_away":"home","win":false,"pts":107,"opp_pts":116,"net":-8.860980968082814,"roll_net":1.2049408520592095,"matchup":"vs OKC","result":"L 107-116","net_s":"-8.9","roll_s":"+1.2"},{"game_no":59,"game_date":"2026-02-25","opp_abbr":"SA","home_away":"home","win":false,"pts":107,"opp_pts":110,"net":-2.9884437000240354,"roll_net":3.6101355789742087,"matchup":"vs SA","result":"L 107-110","net_s":"-3.0","roll_s":"+3.6"},{"game_no":60,"game_date":"2026-02-28","opp_abbr":"WSH","home_away":"away","win":true,"pts":134,"opp_pts":125,"net":9.31131683122564,"roll_net":5.5461221581194025,"matchup":"at WSH","result":"W 134-125","net_s":"+9.3","roll_s":"+5.5"},{"game_no":61,"game_date":"2026-03-03","opp_abbr":"NY","home_away":"home","win":false,"pts":95,"opp_pts":111,"net":-16.8154020385051,"roll_net":3.251699295675081,"matchup":"vs NY","result":"L 95-111","net_s":"-16.8","roll_s":"+3.3"},{"game_no":62,"game_date":"2026-03-05","opp_abbr":"MIN","home_away":"away","win":false,"pts":107,"opp_pts":115,"net":-8.33768612767625,"roll_net":2.658529151334079,"matchup":"at MIN","result":"L 107-115","net_s":"-8.3","roll_s":"+2.7"},{"game_no":63,"game_date":"2026-03-08","opp_abbr":"DAL","home_away":"home","win":true,"pts":122,"opp_pts":92,"net":29.771473026829256,"roll_net":4.062257241284996,"matchup":"vs DAL","result":"W 122-92","net_s":"+29.8","roll_s":"+4.1"},{"game_no":64,"game_date":"2026-03-10","opp_abbr":"HOU","home_away":"away","win":false,"pts":99,"opp_pts":113,"net":-14.878351299688319,"roll_net":0.8203140602248311,"matchup":"at HOU","result":"L 99-113","net_s":"-14.9","roll_s":"+0.8"},{"game_no":65,"game_date":"2026-03-11","opp_abbr":"NO","home_away":"away","win":false,"pts":111,"opp_pts":122,"net":-10.931281532542883,"roll_net":1.5234848867798263,"matchup":"at NO","result":"L 111-122","net_s":"-10.9","roll_s":"+1.5"},{"game_no":66,"game_date":"2026-03-13","opp_abbr":"PHX","home_away":"home","win":true,"pts":122,"opp_pts":115,"net":7.213933196688458,"roll_net":1.3295580006020202,"matchup":"vs PHX","result":"W 122-115","net_s":"+7.2","roll_s":"+1.3"},{"game_no":67,"game_date":"2026-03-15","opp_abbr":"DET","home_away":"home","win":true,"pts":119,"opp_pts":108,"net":11.776862014073885,"roll_net":-0.4099858052128553,"matchup":"vs DET","result":"W 119-108","net_s":"+11.8","roll_s":"-0.4"},{"game_no":68,"game_date":"2026-03-18","opp_abbr":"CHI","home_away":"away","win":true,"pts":139,"opp_pts":109,"net":28.040565721184223,"roll_net":3.5675606798575785,"matchup":"at CHI","result":"W 139-109","net_s":"+28.0","roll_s":"+3.6"},{"game_no":69,"game_date":"2026-03-20","opp_abbr":"DEN","home_away":"away","win":false,"pts":115,"opp_pts":121,"net":-6.5053018923723585,"roll_net":3.2891076456602377,"matchup":"at DEN","result":"L 115-121","net_s":"-6.5","roll_s":"+3.3"},{"game_no":70,"game_date":"2026-03-22","opp_abbr":"PHX","home_away":"away","win":false,"pts":98,"opp_pts":120,"net":-23.098968090017863,"roll_net":0.1029342398133366,"matchup":"at PHX","result":"L 98-120","net_s":"-23.1","roll_s":"+0.1"},{"game_no":71,"game_date":"2026-03-23","opp_abbr":"UTAH","home_away":"away","win":true,"pts":143,"opp_pts":127,"net":14.733905187643217,"roll_net":3.3504706749421445,"matchup":"at UTAH","result":"W 143-127","net_s":"+14.7","roll_s":"+3.4"},{"game_no":72,"game_date":"2026-03-25","opp_abbr":"LAC","home_away":"away","win":false,"pts":94,"opp_pts":119,"net":-26.749907933921207,"roll_net":1.6285905140432249,"matchup":"at LAC","result":"L 94-119","net_s":"-26.7","roll_s":"+1.6"},{"game_no":73,"game_date":"2026-03-27","opp_abbr":"NO","home_away":"home","win":true,"pts":119,"opp_pts":106,"net":13.139496992075166,"roll_net":-0.1019767830752869,"matchup":"vs NO","result":"W 119-106","net_s":"+13.1","roll_s":"-0.1"},{"game_no":74,"game_date":"2026-03-29","opp_abbr":"ORL","home_away":"home","win":true,"pts":139,"opp_pts":87,"net":49.07709203264237,"roll_net":6.549285586296634,"matchup":"vs ORL","result":"W 139-87","net_s":"+49.1","roll_s":"+6.5"},{"game_no":75,"game_date":"2026-03-31","opp_abbr":"DET","home_away":"away","win":false,"pts":116,"opp_pts":127,"net":-11.176835945546998,"roll_net":6.563907138290432,"matchup":"at DET","result":"L 116-127","net_s":"-11.2","roll_s":"+6.6"},{"game_no":76,"game_date":"2026-04-01","opp_abbr":"SAC","home_away":"home","win":false,"pts":115,"opp_pts":123,"net":-8.385971861552363,"roll_net":5.057520070543433,"matchup":"vs SAC","result":"L 115-123","net_s":"-8.4","roll_s":"+5.1"},{"game_no":77,"game_date":"2026-04-03","opp_abbr":"MEM","home_away":"away","win":true,"pts":128,"opp_pts":96,"net":32.09912841780536,"roll_net":7.136291506564902,"matchup":"at MEM","result":"W 128-96","net_s":"+32.1","roll_s":"+7.1"},{"game_no":78,"game_date":"2026-04-05","opp_abbr":"BOS","home_away":"away","win":false,"pts":101,"opp_pts":115,"net":-14.217657573741278,"roll_net":2.7372380358750945,"matchup":"at BOS","result":"L 101-115","net_s":"-14.2","roll_s":"+2.7"},{"game_no":79,"game_date":"2026-04-07","opp_abbr":"MIA","home_away":"home","win":true,"pts":121,"opp_pts":95,"net":25.68486957044236,"roll_net":5.927323700297521,"matchup":"vs MIA","result":"W 121-95","net_s":"+25.7","roll_s":"+5.9"},{"game_no":80,"game_date":"2026-04-09","opp_abbr":"MIA","home_away":"home","win":true,"pts":128,"opp_pts":114,"net":14.740435341579115,"roll_net":9.546542207955923,"matchup":"vs MIA","result":"W 128-114","net_s":"+14.7","roll_s":"+9.5"},{"game_no":81,"game_date":"2026-04-10","opp_abbr":"NY","home_away":"away","win":false,"pts":95,"opp_pts":112,"net":-18.51541554959786,"roll_net":6.337219693814106,"matchup":"at NY","result":"L 95-112","net_s":"-18.5","roll_s":"+6.3"},{"game_no":82,"game_date":"2026-04-12","opp_abbr":"BKN","home_away":"home","win":true,"pts":136,"opp_pts":101,"net":35.26621357209433,"roll_net":12.396687260487397,"matchup":"vs BKN","result":"W 136-101","net_s":"+35.3","roll_s":"+12.4"}],"data-9bf3fc3596382284c22b8f30159938e8":[{"game_no":82,"game_date":"2026-04-12","opp_abbr":"BKN","home_away":"home","win":true,"pts":136,"opp_pts":101,"net":35.26621357209433,"roll_net":12.396687260487397,"matchup":"vs BKN","result":"W 136-101","net_s":"+35.3","roll_s":"+12.4","lbl":"+12.4"}]}}}</script>
+<script type="application/json" id="spec-league">{"light":{"config":{"view":{"continuousWidth":300,"continuousHeight":300,"stroke":null},"axis":{"labelColor":"#85848f","titleColor":"#55545c","gridColor":"#ebeaef","domainColor":"#c9c8d0","tickColor":"#c9c8d0","labelFontSize":11,"titleFontSize":11,"titleFontWeight":500,"gridWidth":1,"domainWidth":1,"labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titlePadding":8},"background":"#ffffff","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","legend":{"labelColor":"#55545c","titleColor":"#55545c","labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","labelFontSize":12,"symbolStrokeWidth":2},"padding":{"left":4,"right":12,"top":8,"bottom":4},"text":{"color":"#55545c","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","fontSize":11},"title":{"color":"#141417","subtitleColor":"#55545c","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","subtitleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","anchor":"start","fontSize":18,"fontWeight":600,"subtitleFontSize":12,"subtitlePadding":6,"offset":14}},"layer":[{"data":{"name":"data-dc0e2d2fc7fd6478cab38a4ba9c3e687"},"mark":{"type":"rule","color":"#c9c8d0"},"encoding":{"x":{"field":"v","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-29389f4a674fbf2ca67f9c56d35ac154"},"mark":{"type":"rule","color":"#c9c8d0"},"encoding":{"y":{"field":"v","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-f2fe2d8474f925ffcae781c4ee74f9e6"},"mark":{"type":"text","align":"right","color":"#85848f","fontSize":11},"encoding":{"text":{"field":"t","type":"nominal"},"x":{"field":"ortg","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"drtg","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-2adb956e189dca70e96e7411e1b963f7"},"mark":{"type":"point","color":"#8b8a95","filled":true,"opacity":0.9,"size":60,"stroke":"#ffffff","strokeWidth":2},"encoding":{"tooltip":[{"field":"team_abbr","title":"Team","type":"nominal"},{"field":"record","title":"Record","type":"nominal"},{"field":"o","title":"Offense","type":"nominal"},{"field":"dd","title":"Defense","type":"nominal"},{"field":"n","title":"Net","type":"nominal"}],"x":{"axis":{"domain":false,"ticks":false},"field":"ortg","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"title":"Offensive rating (points scored per 100 possessions) \u2192","type":"quantitative"},"y":{"axis":{"domain":false,"ticks":false},"field":"drtg","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"title":"Defensive rating (allowed per 100, flipped) \u2192","type":"quantitative"}}},{"data":{"name":"data-40458ffb487ce2d94a1e4e89aacdc1da"},"mark":{"type":"point","color":"#CE1141","filled":true,"size":150,"stroke":"#ffffff","strokeWidth":2},"encoding":{"tooltip":[{"field":"team_abbr","title":"Team","type":"nominal"},{"field":"record","title":"Record","type":"nominal"},{"field":"o","title":"Offense","type":"nominal"},{"field":"dd","title":"Defense","type":"nominal"},{"field":"n","title":"Net","type":"nominal"}],"x":{"axis":{"domain":false,"ticks":false},"field":"ortg","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"title":"Offensive rating (points scored per 100 possessions) \u2192","type":"quantitative"},"y":{"axis":{"domain":false,"ticks":false},"field":"drtg","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"title":"Defensive rating (allowed per 100, flipped) \u2192","type":"quantitative"}}},{"data":{"name":"data-aa412cce68419a4f8deab9121e7c7d5c"},"mark":{"type":"text","align":"left","baseline":"middle","color":"#85848f","fontSize":10},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-bd970737686b14caa82b7495e028c089"},"mark":{"type":"text","align":"center","baseline":"middle","color":"#85848f","fontSize":10},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-98d2a587b77806ecf870bc645a4cf401"},"mark":{"type":"text","align":"right","baseline":"middle","color":"#85848f","fontSize":10},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-60819591db4fdc0662cf028870bce71b"},"mark":{"type":"text","align":"center","baseline":"middle","color":"#141417","fontSize":13,"fontWeight":700},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}}],"height":460,"width":520,"$schema":"https://vega.github.io/schema/vega-lite/v6.4.1.json","datasets":{"data-dc0e2d2fc7fd6478cab38a4ba9c3e687":[{"v":115.82852566320462}],"data-29389f4a674fbf2ca67f9c56d35ac154":[{"v":115.78248283719374}],"data-f2fe2d8474f925ffcae781c4ee74f9e6":[{"ortg":123.80972502784446,"drtg":106.73319593653382,"t":"Good offense, good defense"}],"data-2adb956e189dca70e96e7411e1b963f7":[{"team_abbr":"ATL","w":46,"l":36,"ortg":116.13439321151344,"drtg":113.76723139806072,"net":2.367161813452725,"ortg_rank":14,"drtg_rank":9,"net_rank":12,"is_team":false,"record":"46-36","o":"116.1 (#14)","dd":"113.8 (#9)","n":"+2.4 (#12)"},{"team_abbr":"BKN","w":20,"l":62,"ortg":108.73833175704368,"drtg":118.9912322531315,"net":-10.252900496087818,"ortg_rank":30,"drtg_rank":26,"net_rank":29,"is_team":false,"record":"20-62","o":"108.7 (#30)","dd":"119.0 (#26)","n":"-10.3 (#29)"},{"team_abbr":"BOS","w":56,"l":26,"ortg":120.80161719112463,"drtg":112.70798579936422,"net":8.093631391760411,"ortg_rank":2,"drtg_rank":4,"net_rank":4,"is_team":false,"record":"56-26","o":"120.8 (#2)","dd":"112.7 (#4)","n":"+8.1 (#4)"},{"team_abbr":"CHA","w":44,"l":38,"ortg":119.42714030387957,"drtg":114.45571724487228,"net":4.971423059007293,"ortg_rank":5,"drtg_rank":12,"net_rank":8,"is_team":false,"record":"44-38","o":"119.4 (#5)","dd":"114.5 (#12)","n":"+5.0 (#8)"},{"team_abbr":"CHI","w":31,"l":51,"ortg":113.24791635330006,"drtg":118.31836411285327,"net":-5.070447759553218,"ortg_rank":23,"drtg_rank":22,"net_rank":22,"is_team":false,"record":"31-51","o":"113.2 (#23)","dd":"118.3 (#22)","n":"-5.1 (#22)"},{"team_abbr":"CLE","w":52,"l":30,"ortg":119.22266803556452,"drtg":115.12328642879122,"net":4.099381606773306,"ortg_rank":6,"drtg_rank":15,"net_rank":9,"is_team":false,"record":"52-30","o":"119.2 (#6)","dd":"115.1 (#15)","n":"+4.1 (#9)"},{"team_abbr":"DAL","w":26,"l":56,"ortg":111.20958095790942,"drtg":116.58110591975759,"net":-5.371524961848166,"ortg_rank":27,"drtg_rank":20,"net_rank":23,"is_team":false,"record":"26-56","o":"111.2 (#27)","dd":"116.6 (#20)","n":"-5.4 (#23)"},{"team_abbr":"DEN","w":54,"l":28,"ortg":122.60972502784446,"drtg":117.44076359310417,"net":5.168961434740297,"ortg_rank":1,"drtg_rank":21,"net_rank":7,"is_team":false,"record":"54-28","o":"122.6 (#1)","dd":"117.4 (#21)","n":"+5.2 (#7)"},{"team_abbr":"DET","w":60,"l":22,"ortg":117.93190729388402,"drtg":109.76203611446925,"net":8.16987117941477,"ortg_rank":10,"drtg_rank":2,"net_rank":3,"is_team":false,"record":"60-22","o":"117.9 (#10)","dd":"109.8 (#2)","n":"+8.2 (#3)"},{"team_abbr":"GS","w":37,"l":45,"ortg":115.03366208946177,"drtg":115.59671257425802,"net":-0.5630504847962499,"ortg_rank":18,"drtg_rank":16,"net_rank":20,"is_team":false,"record":"37-45","o":"115.0 (#18)","dd":"115.6 (#16)","n":"-0.6 (#20)"},{"team_abbr":"HOU","w":52,"l":30,"ortg":118.6078601457396,"drtg":113.23542241239463,"net":5.372437733344967,"ortg_rank":8,"drtg_rank":6,"net_rank":6,"is_team":false,"record":"52-30","o":"118.6 (#8)","dd":"113.2 (#6)","n":"+5.4 (#6)"},{"team_abbr":"IND","w":19,"l":63,"ortg":110.94832990469638,"drtg":118.83108899869531,"net":-7.882759093998928,"ortg_rank":28,"drtg_rank":23,"net_rank":26,"is_team":false,"record":"19-63","o":"110.9 (#28)","dd":"118.8 (#23)","n":"-7.9 (#26)"},{"team_abbr":"LAC","w":42,"l":40,"ortg":117.55341204401758,"drtg":116.3815321726387,"net":1.1718798713788772,"ortg_rank":11,"drtg_rank":18,"net_rank":16,"is_team":false,"record":"42-40","o":"117.6 (#11)","dd":"116.4 (#18)","n":"+1.2 (#16)"},{"team_abbr":"LAL","w":53,"l":29,"ortg":118.21982124593491,"drtg":116.4353711139208,"net":1.7844501320141148,"ortg_rank":9,"drtg_rank":19,"net_rank":14,"is_team":false,"record":"53-29","o":"118.2 (#9)","dd":"116.4 (#19)","n":"+1.8 (#14)"},{"team_abbr":"MEM","w":25,"l":57,"ortg":112.92377877432253,"drtg":118.84438102208824,"net":-5.920602247765714,"ortg_rank":25,"drtg_rank":24,"net_rank":24,"is_team":false,"record":"25-57","o":"112.9 (#25)","dd":"118.8 (#24)","n":"-5.9 (#24)"},{"team_abbr":"MIA","w":43,"l":39,"ortg":116.71541157187153,"drtg":114.46612859233086,"net":2.2492829795406664,"ortg_rank":13,"drtg_rank":13,"net_rank":13,"is_team":false,"record":"43-39","o":"116.7 (#13)","dd":"114.5 (#13)","n":"+2.2 (#13)"},{"team_abbr":"MIL","w":32,"l":50,"ortg":112.95041201469566,"drtg":119.28768711560836,"net":-6.337275100912706,"ortg_rank":24,"drtg_rank":27,"net_rank":25,"is_team":false,"record":"32-50","o":"113.0 (#24)","dd":"119.3 (#27)","n":"-6.3 (#25)"},{"team_abbr":"MIN","w":49,"l":33,"ortg":116.78571978105312,"drtg":113.46657210228197,"net":3.319147678771145,"ortg_rank":12,"drtg_rank":8,"net_rank":10,"is_team":false,"record":"49-33","o":"116.8 (#12)","dd":"113.5 (#8)","n":"+3.3 (#10)"},{"team_abbr":"NO","w":26,"l":56,"ortg":114.4727183969387,"drtg":118.93175281987445,"net":-4.459034422935744,"ortg_rank":20,"drtg_rank":25,"net_rank":21,"is_team":false,"record":"26-56","o":"114.5 (#20)","dd":"118.9 (#25)","n":"-4.5 (#21)"},{"team_abbr":"NY","w":53,"l":29,"ortg":119.88379548730757,"drtg":113.36796243066156,"net":6.515833056646002,"ortg_rank":3,"drtg_rank":7,"net_rank":5,"is_team":false,"record":"53-29","o":"119.9 (#3)","dd":"113.4 (#7)","n":"+6.5 (#5)"},{"team_abbr":"OKC","w":64,"l":18,"ortg":118.91973686870564,"drtg":107.78319593653382,"net":11.136540932171826,"ortg_rank":7,"drtg_rank":1,"net_rank":1,"is_team":false,"record":"64-18","o":"118.9 (#7)","dd":"107.8 (#1)","n":"+11.1 (#1)"},{"team_abbr":"ORL","w":45,"l":37,"ortg":114.97248099139166,"drtg":114.34256117139878,"net":0.6299198199928782,"ortg_rank":19,"drtg_rank":11,"net_rank":17,"is_team":false,"record":"45-37","o":"115.0 (#19)","dd":"114.3 (#11)","n":"+0.6 (#17)"},{"team_abbr":"PHI","w":45,"l":37,"ortg":115.44100887230846,"drtg":115.62324578380968,"net":-0.1822369115012208,"ortg_rank":17,"drtg_rank":17,"net_rank":18,"is_team":false,"record":"45-37","o":"115.4 (#17)","dd":"115.6 (#17)","n":"-0.2 (#18)"},{"team_abbr":"PHX","w":45,"l":37,"ortg":115.46242798813499,"drtg":113.96161653248332,"net":1.5008114556516716,"ortg_rank":16,"drtg_rank":10,"net_rank":15,"is_team":false,"record":"45-37","o":"115.5 (#16)","dd":"114.0 (#10)","n":"+1.5 (#15)"},{"team_abbr":"POR","w":42,"l":40,"ortg":114.4707617735183,"drtg":114.76089782617058,"net":-0.29013605265227227,"ortg_rank":21,"drtg_rank":14,"net_rank":19,"is_team":false,"record":"42-40","o":"114.5 (#21)","dd":"114.8 (#14)","n":"-0.3 (#19)"},{"team_abbr":"SA","w":62,"l":20,"ortg":119.65577696077152,"drtg":111.36292288889227,"net":8.292854071879248,"ortg_rank":4,"drtg_rank":3,"net_rank":2,"is_team":false,"record":"62-20","o":"119.7 (#4)","dd":"111.4 (#3)","n":"+8.3 (#2)"},{"team_abbr":"SAC","w":22,"l":60,"ortg":111.49878948541964,"drtg":121.54372547509709,"net":-10.044935989677455,"ortg_rank":26,"drtg_rank":28,"net_rank":28,"is_team":false,"record":"22-60","o":"111.5 (#26)","dd":"121.5 (#28)","n":"-10.0 (#28)"},{"team_abbr":"UTAH","w":22,"l":60,"ortg":114.14927562657125,"drtg":122.32985532559229,"net":-8.180579699021038,"ortg_rank":22,"drtg_rank":29,"net_rank":27,"is_team":false,"record":"22-60","o":"114.1 (#22)","dd":"122.3 (#29)","n":"-8.2 (#27)"},{"team_abbr":"WSH","w":17,"l":65,"ortg":110.94422074507061,"drtg":122.71212145490635,"net":-11.767900709835743,"ortg_rank":29,"drtg_rank":30,"net_rank":30,"is_team":false,"record":"17-65","o":"110.9 (#29)","dd":"122.7 (#30)","n":"-11.8 (#30)"}],"data-40458ffb487ce2d94a1e4e89aacdc1da":[{"team_abbr":"TOR","w":46,"l":36,"ortg":115.92308899614314,"drtg":113.06200850177025,"net":2.861080494372885,"ortg_rank":15,"drtg_rank":5,"net_rank":11,"is_team":true,"record":"46-36","o":"115.9 (#15)","dd":"113.1 (#5)","n":"+2.9 (#11)"}],"data-aa412cce68419a4f8deab9121e7c7d5c":[{"team_abbr":"CLE","is_team":false,"align":"left","lx":119.48222793203838,"ly":115.12328642879122},{"team_abbr":"MEM","is_team":false,"align":"left","lx":113.18333867079639,"ly":118.84438102208824},{"team_abbr":"MIA","is_team":false,"align":"left","lx":116.97497146834539,"ly":114.46612859233086},{"team_abbr":"MIL","is_team":false,"align":"left","lx":113.20997191116952,"ly":119.28768711560836},{"team_abbr":"PHI","is_team":false,"align":"left","lx":115.70056876878232,"ly":115.62324578380968}],"data-bd970737686b14caa82b7495e028c089":[{"team_abbr":"ATL","is_team":false,"align":"center","lx":116.13439321151344,"ly":114.27391842357994},{"team_abbr":"BKN","is_team":false,"align":"center","lx":108.73833175704368,"ly":118.52352115265222},{"team_abbr":"BOS","is_team":false,"align":"center","lx":120.80161719112463,"ly":112.24027469888495},{"team_abbr":"CHA","is_team":false,"align":"center","lx":119.42714030387957,"ly":113.988006144393},{"team_abbr":"CHI","is_team":false,"align":"center","lx":113.24791635330006,"ly":117.850653012374},{"team_abbr":"DAL","is_team":false,"align":"center","lx":111.20958095790942,"ly":116.11339481927831},{"team_abbr":"DEN","is_team":false,"align":"center","lx":122.60972502784446,"ly":116.97305249262489},{"team_abbr":"DET","is_team":false,"align":"center","lx":117.93190729388402,"ly":109.29432501398998},{"team_abbr":"GS","is_team":false,"align":"center","lx":115.03366208946177,"ly":115.12900147377874},{"team_abbr":"HOU","is_team":false,"align":"center","lx":118.6078601457396,"ly":112.76771131191535},{"team_abbr":"IND","is_team":false,"align":"center","lx":110.94832990469638,"ly":118.36337789821603},{"team_abbr":"LAC","is_team":false,"align":"center","lx":117.55341204401758,"ly":115.91382107215941},{"team_abbr":"LAL","is_team":false,"align":"center","lx":118.21982124593491,"ly":115.96766001344152},{"team_abbr":"MIN","is_team":false,"align":"center","lx":116.78571978105312,"ly":112.9988610018027},{"team_abbr":"NO","is_team":false,"align":"center","lx":114.4727183969387,"ly":118.46404171939517},{"team_abbr":"NY","is_team":false,"align":"center","lx":119.88379548730757,"ly":112.90025133018229},{"team_abbr":"OKC","is_team":false,"align":"center","lx":118.91973686870564,"ly":107.31548483605454},{"team_abbr":"ORL","is_team":false,"align":"center","lx":114.97248099139166,"ly":113.8748500709195},{"team_abbr":"PHX","is_team":false,"align":"center","lx":115.46242798813499,"ly":114.46830355800255},{"team_abbr":"SA","is_team":false,"align":"center","lx":119.65577696077152,"ly":110.895211788413},{"team_abbr":"SAC","is_team":false,"align":"center","lx":111.49878948541964,"ly":121.07601437461781},{"team_abbr":"UTAH","is_team":false,"align":"center","lx":114.14927562657125,"ly":121.86214422511301},{"team_abbr":"WSH","is_team":false,"align":"center","lx":110.94422074507061,"ly":122.24441035442707}],"data-98d2a587b77806ecf870bc645a4cf401":[{"team_abbr":"POR","is_team":false,"align":"right","lx":114.21120187704445,"ly":114.76089782617058}],"data-60819591db4fdc0662cf028870bce71b":[{"team_abbr":"TOR","is_team":true,"align":"center","lx":115.92308899614314,"ly":112.47736962617114}]}},"dark":{"config":{"view":{"continuousWidth":300,"continuousHeight":300,"stroke":null},"axis":{"labelColor":"#8f8e97","titleColor":"#c5c4cc","gridColor":"#2a2a30","domainColor":"#3b3b42","tickColor":"#3b3b42","labelFontSize":11,"titleFontSize":11,"titleFontWeight":500,"gridWidth":1,"domainWidth":1,"labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titlePadding":8},"background":"#1b1b1f","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","legend":{"labelColor":"#c5c4cc","titleColor":"#c5c4cc","labelFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","titleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","labelFontSize":12,"symbolStrokeWidth":2},"padding":{"left":4,"right":12,"top":8,"bottom":4},"text":{"color":"#c5c4cc","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","fontSize":11},"title":{"color":"#f3f3f5","subtitleColor":"#c5c4cc","font":"Barlow, 'Helvetica Neue', Arial, sans-serif","subtitleFont":"Barlow, 'Helvetica Neue', Arial, sans-serif","anchor":"start","fontSize":18,"fontWeight":600,"subtitleFontSize":12,"subtitlePadding":6,"offset":14}},"layer":[{"data":{"name":"data-dc0e2d2fc7fd6478cab38a4ba9c3e687"},"mark":{"type":"rule","color":"#3b3b42"},"encoding":{"x":{"field":"v","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-29389f4a674fbf2ca67f9c56d35ac154"},"mark":{"type":"rule","color":"#3b3b42"},"encoding":{"y":{"field":"v","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-f2fe2d8474f925ffcae781c4ee74f9e6"},"mark":{"type":"text","align":"right","color":"#8f8e97","fontSize":11},"encoding":{"text":{"field":"t","type":"nominal"},"x":{"field":"ortg","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"drtg","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-2adb956e189dca70e96e7411e1b963f7"},"mark":{"type":"point","color":"#8e8d98","filled":true,"opacity":0.9,"size":60,"stroke":"#1b1b1f","strokeWidth":2},"encoding":{"tooltip":[{"field":"team_abbr","title":"Team","type":"nominal"},{"field":"record","title":"Record","type":"nominal"},{"field":"o","title":"Offense","type":"nominal"},{"field":"dd","title":"Defense","type":"nominal"},{"field":"n","title":"Net","type":"nominal"}],"x":{"axis":{"domain":false,"ticks":false},"field":"ortg","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"title":"Offensive rating (points scored per 100 possessions) \u2192","type":"quantitative"},"y":{"axis":{"domain":false,"ticks":false},"field":"drtg","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"title":"Defensive rating (allowed per 100, flipped) \u2192","type":"quantitative"}}},{"data":{"name":"data-40458ffb487ce2d94a1e4e89aacdc1da"},"mark":{"type":"point","color":"#ee3d5a","filled":true,"size":150,"stroke":"#1b1b1f","strokeWidth":2},"encoding":{"tooltip":[{"field":"team_abbr","title":"Team","type":"nominal"},{"field":"record","title":"Record","type":"nominal"},{"field":"o","title":"Offense","type":"nominal"},{"field":"dd","title":"Defense","type":"nominal"},{"field":"n","title":"Net","type":"nominal"}],"x":{"axis":{"domain":false,"ticks":false},"field":"ortg","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"title":"Offensive rating (points scored per 100 possessions) \u2192","type":"quantitative"},"y":{"axis":{"domain":false,"ticks":false},"field":"drtg","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"title":"Defensive rating (allowed per 100, flipped) \u2192","type":"quantitative"}}},{"data":{"name":"data-aa412cce68419a4f8deab9121e7c7d5c"},"mark":{"type":"text","align":"left","baseline":"middle","color":"#8f8e97","fontSize":10},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-bd970737686b14caa82b7495e028c089"},"mark":{"type":"text","align":"center","baseline":"middle","color":"#8f8e97","fontSize":10},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-98d2a587b77806ecf870bc645a4cf401"},"mark":{"type":"text","align":"right","baseline":"middle","color":"#8f8e97","fontSize":10},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}},{"data":{"name":"data-60819591db4fdc0662cf028870bce71b"},"mark":{"type":"text","align":"center","baseline":"middle","color":"#f3f3f5","fontSize":13,"fontWeight":700},"encoding":{"text":{"field":"team_abbr","type":"nominal"},"x":{"field":"lx","scale":{"domain":[107.23833175704368,124.10972502784446],"nice":false,"zero":false},"type":"quantitative"},"y":{"field":"ly","scale":{"domain":[124.21212145490635,106.28319593653382],"nice":false,"zero":false},"type":"quantitative"}}}],"height":460,"width":520,"$schema":"https://vega.github.io/schema/vega-lite/v6.4.1.json","datasets":{"data-dc0e2d2fc7fd6478cab38a4ba9c3e687":[{"v":115.82852566320462}],"data-29389f4a674fbf2ca67f9c56d35ac154":[{"v":115.78248283719374}],"data-f2fe2d8474f925ffcae781c4ee74f9e6":[{"ortg":123.80972502784446,"drtg":106.73319593653382,"t":"Good offense, good defense"}],"data-2adb956e189dca70e96e7411e1b963f7":[{"team_abbr":"ATL","w":46,"l":36,"ortg":116.13439321151344,"drtg":113.76723139806072,"net":2.367161813452725,"ortg_rank":14,"drtg_rank":9,"net_rank":12,"is_team":false,"record":"46-36","o":"116.1 (#14)","dd":"113.8 (#9)","n":"+2.4 (#12)"},{"team_abbr":"BKN","w":20,"l":62,"ortg":108.73833175704368,"drtg":118.9912322531315,"net":-10.252900496087818,"ortg_rank":30,"drtg_rank":26,"net_rank":29,"is_team":false,"record":"20-62","o":"108.7 (#30)","dd":"119.0 (#26)","n":"-10.3 (#29)"},{"team_abbr":"BOS","w":56,"l":26,"ortg":120.80161719112463,"drtg":112.70798579936422,"net":8.093631391760411,"ortg_rank":2,"drtg_rank":4,"net_rank":4,"is_team":false,"record":"56-26","o":"120.8 (#2)","dd":"112.7 (#4)","n":"+8.1 (#4)"},{"team_abbr":"CHA","w":44,"l":38,"ortg":119.42714030387957,"drtg":114.45571724487228,"net":4.971423059007293,"ortg_rank":5,"drtg_rank":12,"net_rank":8,"is_team":false,"record":"44-38","o":"119.4 (#5)","dd":"114.5 (#12)","n":"+5.0 (#8)"},{"team_abbr":"CHI","w":31,"l":51,"ortg":113.24791635330006,"drtg":118.31836411285327,"net":-5.070447759553218,"ortg_rank":23,"drtg_rank":22,"net_rank":22,"is_team":false,"record":"31-51","o":"113.2 (#23)","dd":"118.3 (#22)","n":"-5.1 (#22)"},{"team_abbr":"CLE","w":52,"l":30,"ortg":119.22266803556452,"drtg":115.12328642879122,"net":4.099381606773306,"ortg_rank":6,"drtg_rank":15,"net_rank":9,"is_team":false,"record":"52-30","o":"119.2 (#6)","dd":"115.1 (#15)","n":"+4.1 (#9)"},{"team_abbr":"DAL","w":26,"l":56,"ortg":111.20958095790942,"drtg":116.58110591975759,"net":-5.371524961848166,"ortg_rank":27,"drtg_rank":20,"net_rank":23,"is_team":false,"record":"26-56","o":"111.2 (#27)","dd":"116.6 (#20)","n":"-5.4 (#23)"},{"team_abbr":"DEN","w":54,"l":28,"ortg":122.60972502784446,"drtg":117.44076359310417,"net":5.168961434740297,"ortg_rank":1,"drtg_rank":21,"net_rank":7,"is_team":false,"record":"54-28","o":"122.6 (#1)","dd":"117.4 (#21)","n":"+5.2 (#7)"},{"team_abbr":"DET","w":60,"l":22,"ortg":117.93190729388402,"drtg":109.76203611446925,"net":8.16987117941477,"ortg_rank":10,"drtg_rank":2,"net_rank":3,"is_team":false,"record":"60-22","o":"117.9 (#10)","dd":"109.8 (#2)","n":"+8.2 (#3)"},{"team_abbr":"GS","w":37,"l":45,"ortg":115.03366208946177,"drtg":115.59671257425802,"net":-0.5630504847962499,"ortg_rank":18,"drtg_rank":16,"net_rank":20,"is_team":false,"record":"37-45","o":"115.0 (#18)","dd":"115.6 (#16)","n":"-0.6 (#20)"},{"team_abbr":"HOU","w":52,"l":30,"ortg":118.6078601457396,"drtg":113.23542241239463,"net":5.372437733344967,"ortg_rank":8,"drtg_rank":6,"net_rank":6,"is_team":false,"record":"52-30","o":"118.6 (#8)","dd":"113.2 (#6)","n":"+5.4 (#6)"},{"team_abbr":"IND","w":19,"l":63,"ortg":110.94832990469638,"drtg":118.83108899869531,"net":-7.882759093998928,"ortg_rank":28,"drtg_rank":23,"net_rank":26,"is_team":false,"record":"19-63","o":"110.9 (#28)","dd":"118.8 (#23)","n":"-7.9 (#26)"},{"team_abbr":"LAC","w":42,"l":40,"ortg":117.55341204401758,"drtg":116.3815321726387,"net":1.1718798713788772,"ortg_rank":11,"drtg_rank":18,"net_rank":16,"is_team":false,"record":"42-40","o":"117.6 (#11)","dd":"116.4 (#18)","n":"+1.2 (#16)"},{"team_abbr":"LAL","w":53,"l":29,"ortg":118.21982124593491,"drtg":116.4353711139208,"net":1.7844501320141148,"ortg_rank":9,"drtg_rank":19,"net_rank":14,"is_team":false,"record":"53-29","o":"118.2 (#9)","dd":"116.4 (#19)","n":"+1.8 (#14)"},{"team_abbr":"MEM","w":25,"l":57,"ortg":112.92377877432253,"drtg":118.84438102208824,"net":-5.920602247765714,"ortg_rank":25,"drtg_rank":24,"net_rank":24,"is_team":false,"record":"25-57","o":"112.9 (#25)","dd":"118.8 (#24)","n":"-5.9 (#24)"},{"team_abbr":"MIA","w":43,"l":39,"ortg":116.71541157187153,"drtg":114.46612859233086,"net":2.2492829795406664,"ortg_rank":13,"drtg_rank":13,"net_rank":13,"is_team":false,"record":"43-39","o":"116.7 (#13)","dd":"114.5 (#13)","n":"+2.2 (#13)"},{"team_abbr":"MIL","w":32,"l":50,"ortg":112.95041201469566,"drtg":119.28768711560836,"net":-6.337275100912706,"ortg_rank":24,"drtg_rank":27,"net_rank":25,"is_team":false,"record":"32-50","o":"113.0 (#24)","dd":"119.3 (#27)","n":"-6.3 (#25)"},{"team_abbr":"MIN","w":49,"l":33,"ortg":116.78571978105312,"drtg":113.46657210228197,"net":3.319147678771145,"ortg_rank":12,"drtg_rank":8,"net_rank":10,"is_team":false,"record":"49-33","o":"116.8 (#12)","dd":"113.5 (#8)","n":"+3.3 (#10)"},{"team_abbr":"NO","w":26,"l":56,"ortg":114.4727183969387,"drtg":118.93175281987445,"net":-4.459034422935744,"ortg_rank":20,"drtg_rank":25,"net_rank":21,"is_team":false,"record":"26-56","o":"114.5 (#20)","dd":"118.9 (#25)","n":"-4.5 (#21)"},{"team_abbr":"NY","w":53,"l":29,"ortg":119.88379548730757,"drtg":113.36796243066156,"net":6.515833056646002,"ortg_rank":3,"drtg_rank":7,"net_rank":5,"is_team":false,"record":"53-29","o":"119.9 (#3)","dd":"113.4 (#7)","n":"+6.5 (#5)"},{"team_abbr":"OKC","w":64,"l":18,"ortg":118.91973686870564,"drtg":107.78319593653382,"net":11.136540932171826,"ortg_rank":7,"drtg_rank":1,"net_rank":1,"is_team":false,"record":"64-18","o":"118.9 (#7)","dd":"107.8 (#1)","n":"+11.1 (#1)"},{"team_abbr":"ORL","w":45,"l":37,"ortg":114.97248099139166,"drtg":114.34256117139878,"net":0.6299198199928782,"ortg_rank":19,"drtg_rank":11,"net_rank":17,"is_team":false,"record":"45-37","o":"115.0 (#19)","dd":"114.3 (#11)","n":"+0.6 (#17)"},{"team_abbr":"PHI","w":45,"l":37,"ortg":115.44100887230846,"drtg":115.62324578380968,"net":-0.1822369115012208,"ortg_rank":17,"drtg_rank":17,"net_rank":18,"is_team":false,"record":"45-37","o":"115.4 (#17)","dd":"115.6 (#17)","n":"-0.2 (#18)"},{"team_abbr":"PHX","w":45,"l":37,"ortg":115.46242798813499,"drtg":113.96161653248332,"net":1.5008114556516716,"ortg_rank":16,"drtg_rank":10,"net_rank":15,"is_team":false,"record":"45-37","o":"115.5 (#16)","dd":"114.0 (#10)","n":"+1.5 (#15)"},{"team_abbr":"POR","w":42,"l":40,"ortg":114.4707617735183,"drtg":114.76089782617058,"net":-0.29013605265227227,"ortg_rank":21,"drtg_rank":14,"net_rank":19,"is_team":false,"record":"42-40","o":"114.5 (#21)","dd":"114.8 (#14)","n":"-0.3 (#19)"},{"team_abbr":"SA","w":62,"l":20,"ortg":119.65577696077152,"drtg":111.36292288889227,"net":8.292854071879248,"ortg_rank":4,"drtg_rank":3,"net_rank":2,"is_team":false,"record":"62-20","o":"119.7 (#4)","dd":"111.4 (#3)","n":"+8.3 (#2)"},{"team_abbr":"SAC","w":22,"l":60,"ortg":111.49878948541964,"drtg":121.54372547509709,"net":-10.044935989677455,"ortg_rank":26,"drtg_rank":28,"net_rank":28,"is_team":false,"record":"22-60","o":"111.5 (#26)","dd":"121.5 (#28)","n":"-10.0 (#28)"},{"team_abbr":"UTAH","w":22,"l":60,"ortg":114.14927562657125,"drtg":122.32985532559229,"net":-8.180579699021038,"ortg_rank":22,"drtg_rank":29,"net_rank":27,"is_team":false,"record":"22-60","o":"114.1 (#22)","dd":"122.3 (#29)","n":"-8.2 (#27)"},{"team_abbr":"WSH","w":17,"l":65,"ortg":110.94422074507061,"drtg":122.71212145490635,"net":-11.767900709835743,"ortg_rank":29,"drtg_rank":30,"net_rank":30,"is_team":false,"record":"17-65","o":"110.9 (#29)","dd":"122.7 (#30)","n":"-11.8 (#30)"}],"data-40458ffb487ce2d94a1e4e89aacdc1da":[{"team_abbr":"TOR","w":46,"l":36,"ortg":115.92308899614314,"drtg":113.06200850177025,"net":2.861080494372885,"ortg_rank":15,"drtg_rank":5,"net_rank":11,"is_team":true,"record":"46-36","o":"115.9 (#15)","dd":"113.1 (#5)","n":"+2.9 (#11)"}],"data-aa412cce68419a4f8deab9121e7c7d5c":[{"team_abbr":"CLE","is_team":false,"align":"left","lx":119.48222793203838,"ly":115.12328642879122},{"team_abbr":"MEM","is_team":false,"align":"left","lx":113.18333867079639,"ly":118.84438102208824},{"team_abbr":"MIA","is_team":false,"align":"left","lx":116.97497146834539,"ly":114.46612859233086},{"team_abbr":"MIL","is_team":false,"align":"left","lx":113.20997191116952,"ly":119.28768711560836},{"team_abbr":"PHI","is_team":false,"align":"left","lx":115.70056876878232,"ly":115.62324578380968}],"data-bd970737686b14caa82b7495e028c089":[{"team_abbr":"ATL","is_team":false,"align":"center","lx":116.13439321151344,"ly":114.27391842357994},{"team_abbr":"BKN","is_team":false,"align":"center","lx":108.73833175704368,"ly":118.52352115265222},{"team_abbr":"BOS","is_team":false,"align":"center","lx":120.80161719112463,"ly":112.24027469888495},{"team_abbr":"CHA","is_team":false,"align":"center","lx":119.42714030387957,"ly":113.988006144393},{"team_abbr":"CHI","is_team":false,"align":"center","lx":113.24791635330006,"ly":117.850653012374},{"team_abbr":"DAL","is_team":false,"align":"center","lx":111.20958095790942,"ly":116.11339481927831},{"team_abbr":"DEN","is_team":false,"align":"center","lx":122.60972502784446,"ly":116.97305249262489},{"team_abbr":"DET","is_team":false,"align":"center","lx":117.93190729388402,"ly":109.29432501398998},{"team_abbr":"GS","is_team":false,"align":"center","lx":115.03366208946177,"ly":115.12900147377874},{"team_abbr":"HOU","is_team":false,"align":"center","lx":118.6078601457396,"ly":112.76771131191535},{"team_abbr":"IND","is_team":false,"align":"center","lx":110.94832990469638,"ly":118.36337789821603},{"team_abbr":"LAC","is_team":false,"align":"center","lx":117.55341204401758,"ly":115.91382107215941},{"team_abbr":"LAL","is_team":false,"align":"center","lx":118.21982124593491,"ly":115.96766001344152},{"team_abbr":"MIN","is_team":false,"align":"center","lx":116.78571978105312,"ly":112.9988610018027},{"team_abbr":"NO","is_team":false,"align":"center","lx":114.4727183969387,"ly":118.46404171939517},{"team_abbr":"NY","is_team":false,"align":"center","lx":119.88379548730757,"ly":112.90025133018229},{"team_abbr":"OKC","is_team":false,"align":"center","lx":118.91973686870564,"ly":107.31548483605454},{"team_abbr":"ORL","is_team":false,"align":"center","lx":114.97248099139166,"ly":113.8748500709195},{"team_abbr":"PHX","is_team":false,"align":"center","lx":115.46242798813499,"ly":114.46830355800255},{"team_abbr":"SA","is_team":false,"align":"center","lx":119.65577696077152,"ly":110.895211788413},{"team_abbr":"SAC","is_team":false,"align":"center","lx":111.49878948541964,"ly":121.07601437461781},{"team_abbr":"UTAH","is_team":false,"align":"center","lx":114.14927562657125,"ly":121.86214422511301},{"team_abbr":"WSH","is_team":false,"align":"center","lx":110.94422074507061,"ly":122.24441035442707}],"data-98d2a587b77806ecf870bc645a4cf401":[{"team_abbr":"POR","is_team":false,"align":"right","lx":114.21120187704445,"ly":114.76089782617058}],"data-60819591db4fdc0662cf028870bce71b":[{"team_abbr":"TOR","is_team":true,"align":"center","lx":115.92308899614314,"ly":112.47736962617114}]}}}</script>
+<script src="vega-bundle.js" onerror="window.__chartLibBlocked = true"></script><script>
+(function () {
+  // Each chart ships a light and a dark version; show the one matching the viewer's theme.
+  function theme() {
+    var t = document.documentElement.getAttribute("data-theme");
+    if (t === "dark" || t === "light") return t;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  var shown = null;
+  function render() {
+    var th = theme();
+    if (th === shown) return;
+    shown = th;
+    var charts = document.querySelectorAll("[data-spec]");
+    for (var i = 0; i < charts.length; i++) {
+      (function (el) {
+        var src = document.getElementById("spec-" + el.getAttribute("data-spec"));
+        if (!src) return;
+        if (!window.vegaEmbed) {
+          el.innerHTML = '<p class="fallback">The chart library didn\'t load' + (window.__chartLibBlocked ? ' (vega-bundle.js is missing from this page\'s folder)' : '') + '. Re-run the command that built this page, for example <code>python run.py demo</code>, to recreate it. The PNG versions are linked at the bottom of the page.</p>';
+          return;
+        }
+        var spec = JSON.parse(src.textContent)[th];
+        window.vegaEmbed(el, spec, { actions: false, renderer: "svg", tooltip: { theme: th } })
+          .catch(function (e) { el.innerHTML = '<p class="fallback">Chart failed to render: ' + e.message + "</p>"; });
+      })(charts[i]);
+    }
+  }
+  render();
+  if (window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(render);
+  }
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>
+</body>
+</html>

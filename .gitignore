@@ -1,0 +1,7 @@
+data/
+assets/fonts/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+*.localtest.html

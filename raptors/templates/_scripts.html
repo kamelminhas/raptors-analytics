@@ -1,0 +1,46 @@
+{% if specs %}
+{% for key, spec in specs.items() %}
+<script type="application/json" id="spec-{{ key }}">{{ spec|safe }}</script>
+{% endfor %}
+{% if js.inline %}<script>{{ js.inline|safe }}</script>{% else %}<script src="{{ js.src }}" onerror="window.__chartLibBlocked = true"></script>{% endif %}
+<script>
+(function () {
+  // Each chart ships a light and a dark version; show the one matching the viewer's theme.
+  function theme() {
+    var t = document.documentElement.getAttribute("data-theme");
+    if (t === "dark" || t === "light") return t;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  var shown = null;
+  function render() {
+    var th = theme();
+    if (th === shown) return;
+    shown = th;
+    var charts = document.querySelectorAll("[data-spec]");
+    for (var i = 0; i < charts.length; i++) {
+      (function (el) {
+        var src = document.getElementById("spec-" + el.getAttribute("data-spec"));
+        if (!src) return;
+        if (!window.vegaEmbed) {
+          el.innerHTML = '<p class="fallback">The chart library didn\'t load' + (window.__chartLibBlocked ? ' (vega-bundle.js is missing from this page\'s folder)' : '') + '. Re-run the command that built this page, for example <code>python run.py demo</code>, to recreate it. The PNG versions are linked at the bottom of the page.</p>';
+          return;
+        }
+        var spec = JSON.parse(src.textContent)[th];
+        window.vegaEmbed(el, spec, { actions: false, renderer: "svg", tooltip: { theme: th } })
+          .catch(function (e) { el.innerHTML = '<p class="fallback">Chart failed to render: ' + e.message + "</p>"; });
+      })(charts[i]);
+    }
+  }
+  render();
+  if (window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(render);
+  }
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>
+{% endif %}
+{% if not fragment %}
+</body>
+</html>
+{% endif %}

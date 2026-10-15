@@ -1,0 +1,235 @@
+{% set page_title = title_override or (team ~ " " ~ ("vs" if home else "at") ~ " " ~ opp ~ " · " ~ row.game_date) %}
+{% include "_head.html" %}
+{% set won = row.win %}
+<main class="page">
+
+  {% if nav is defined and nav %}
+  <nav class="crumbs" aria-label="Report navigation">
+    <a href="../index.html">{{ cfg.TEAM_NAME }} {{ season_label }}</a>
+    <span class="push">
+      {% if nav.prev %}<a href="{{ nav.prev }}.html">← Previous game</a>{% endif %}
+      {% if nav.next %}<a href="{{ nav.next }}.html">Next game →</a>{% endif %}
+    </span>
+  </nav>
+  {% endif %}
+
+  <header class="board">
+    <p class="eyebrow">{{ cfg.TEAM_NAME }} {{ season_label }} · {{ game_label }}</p>
+    <div class="scoreline">
+      <div class="side team {{ 'winner' if won else 'loser' }}">
+        <div class="who"><span class="abbr">{{ team }}</span><span class="name">{{ cfg.TEAM_CITY }} {{ cfg.TEAM_NAME }}</span></div>
+        <span class="pts">{{ row.pts|int }}</span>
+      </div>
+      <div class="mid">
+        <span class="result {{ 'W' if won else 'L' }}">{{ 'WIN' if won else 'LOSS' }}</span>
+        <span class="status">{{ meta.status or 'Final' }}</span>
+      </div>
+      <div class="side opp {{ 'loser' if won else 'winner' }}">
+        <span class="pts">{{ row.opp_pts|int }}</span>
+        <div class="who"><span class="abbr">{{ opp }}</span><span class="name">{{ opp_name or '' }}</span></div>
+      </div>
+    </div>
+    <div class="facts-row">
+      <span>{{ date_long }}</span>
+      <span>{{ 'vs' if home else 'at' }} {{ opp }}{% if meta.venue %} · {{ meta.venue }}{% endif %}</span>
+      {% if meta.attendance %}<span>Att. {{ "{:,}".format(meta.attendance) }}</span>{% endif %}
+      <span><b>{{ record }}</b>{% if streak %} · {{ streak }}{% endif %}</span>
+    </div>
+    {% if linescore %}
+    <div style="overflow-x:auto">
+      <table class="linescore" aria-label="Score by period">
+        <thead><tr><th></th>{% for p in linescore %}<th>{{ p.label }}</th>{% endfor %}<th>T</th></tr></thead>
+        <tbody>
+          <tr><td>{{ team }}</td>{% for p in linescore %}<td>{{ p.team }}</td>{% endfor %}<td class="total">{{ row.pts|int }}</td></tr>
+          <tr><td>{{ opp }}</td>{% for p in linescore %}<td>{{ p.opp }}</td>{% endfor %}<td class="total">{{ row.opp_pts|int }}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </header>
+
+  <section aria-labelledby="eff">
+    <div class="head">
+      <p class="eyebrow">Efficiency</p>
+      <h2 id="eff">Per 100 possessions</h2>
+      <p class="lede">{{ "%.0f"|format(row.poss) }} possessions each. Comparing per possession takes pace out of it: a 120-110 game at a fast pace can be less efficient than 105-95 at a slow one.</p>
+    </div>
+    <div class="tiles">
+      {% for k in kpis %}
+      <div class="tile">
+        <span class="label">{{ k.label }}</span>
+        <span class="value">{{ k.value }}</span>
+        {% if k.delta %}<span class="delta {{ k.tone }}">{{ k.arrow }} {{ k.delta }} <span class="vs">{{ k.vs }}</span></span>{% endif %}
+        <span class="note">{{ k.note }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section aria-labelledby="ff">
+    <div class="head">
+      <p class="eyebrow">The four factors</p>
+      <h2 id="ff">What decided it</h2>
+      {% set f0 = facts|selectattr("kind", "equalto", "factor")|first %}
+      <p class="lede">{{ f0.text if f0 else '' }}</p>
+    </div>
+    <div class="plate"><div class="chart" data-spec="factors" role="img" aria-label="Points per 100 possessions each factor was worth to {{ team }}"></div></div>
+    <div class="table-wrap">
+      <table class="data sticky">
+        <thead><tr><th class="l">Factor</th><th>{{ team }}</th><th>{{ opp }}</th><th>Edge</th><th>{{ team }} {{ base_label }}</th><th>League avg</th><th>Worth (pts/100)</th></tr></thead>
+        <tbody>
+          {% for f in factor_rows %}
+          <tr><td class="l">{{ f.factor }}</td><td class="strong">{{ f.team }}</td><td>{{ f.opp }}</td><td>{{ f.edge }}</td><td class="dim">{{ f.team_base }}</td><td class="dim">{{ f.league }}</td><td class="{{ 'pos' if f.tone == 'good' else 'neg' }}">{{ f.points }}</td></tr>
+          {% endfor %}
+          <tr><td class="l dim">Everything else</td><td></td><td></td><td></td><td></td><td></td><td class="dim">{{ "%+.1f"|format(residual) }}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">How the points are worked out: a linear regression of net rating on the four factor gaps, fitted on {{ "{:,}".format(model.n) }} team-games (R² = {{ "%.2f"|format(model.r2) }}). One percentage point of eFG% is worth {{ "%.2f"|format(model.coef.efg) }} points per 100 possessions, TOV% {{ "%.2f"|format(model.coef.tov) }}, ORB% {{ "%.2f"|format(model.coef.orb) }}, FT/FGA {{ "%.2f"|format(model.coef.ftr) }}. "Everything else" is what the four factors don't capture in this game. League average is {{ league_label }}.</p>
+  </section>
+
+  {% if specs.flow %}
+  <section aria-labelledby="flow">
+    <div class="head">
+      <p class="eyebrow">Game flow</p>
+      <h2 id="flow">How it unfolded</h2>
+      <p class="lede">The margin after every basket. Hover the line to see the play that moved it.</p>
+    </div>
+    <div class="plate"><div class="chart" data-spec="flow" role="img" aria-label="Score margin through the game"></div></div>
+    <div class="plate">
+      <div class="statline">
+        <div><b>{{ lead.max_lead }}</b><span>{{ team }} biggest lead</span></div>
+        <div><b>{{ lead.max_deficit }}</b><span>{{ opp }} biggest lead</span></div>
+        <div><b>{{ lead.lead_changes }}</b><span>Lead changes</span></div>
+        <div><b>{{ lead.ties }}</b><span>Times tied</span></div>
+        <div><b>{{ "%.0f"|format(100 * lead.time_leading) }}%</b><span>of the game {{ team }} led</span></div>
+        {% if clutch %}<div><b>{{ clutch.pts_for }}–{{ clutch.pts_against }}</b><span>Clutch-time score</span></div>{% endif %}
+      </div>
+    </div>
+    {% if run_rows %}
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th class="l">Biggest runs</th><th class="l">Team</th><th>Points</th><th class="l">From → to</th></tr></thead>
+        <tbody>{% for r in run_rows %}<tr><td class="l dim">{{ loop.index }}</td><td class="l strong">{{ r.who }}</td><td>{{ r.pts }}–0</td><td class="l">{{ r.span }}</td></tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <section aria-labelledby="players">
+    <div class="head">
+      <p class="eyebrow">Box score, plus</p>
+      <h2 id="players">Players</h2>
+      <p class="lede">TS% is true shooting (points per shot, counting threes and free throws). USG% is the share of team plays a player finished while on the floor. GmSc is Hollinger's Game Score, one number for a whole box-score line (around 10 is an average game). "vs usual" compares Game Score with his average{% if players and players[0].base_label and players[0].base_label != 'this season' %} (early in the season, last season's){% endif %}.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="data sticky">
+        <thead><tr>
+          <th class="l">Player</th><th>Min</th><th>Pts</th><th>Reb</th><th>OReb</th><th>Ast</th><th>Stl</th><th>Blk</th><th>TO</th>
+          <th>FG</th><th>3P</th><th>FT</th><th>+/−</th><th>TS%</th><th>USG%</th><th>GmSc</th><th>vs usual</th>
+        </tr></thead>
+        <tbody>
+          {% for p in players %}
+          {% if loop.first %}<tr class="group"><td colspan="17" class="l">Starters</td></tr>{% endif %}
+          {% if not p.starter and (loop.first or loop.previtem.starter) %}<tr class="group"><td colspan="17" class="l">Bench</td></tr>{% endif %}
+          <tr>
+            <td class="l player">{{ p.name }}<small>{{ p.pos }}</small></td>
+            <td>{{ "%.0f"|format(p.min) }}</td><td class="strong">{{ p.pts }}</td><td>{{ p.reb }}</td><td>{{ p.oreb }}</td><td>{{ p.ast }}</td>
+            <td>{{ p.stl }}</td><td>{{ p.blk }}</td><td>{{ p.tov }}</td>
+            <td>{{ p.fg }}</td><td>{{ p.fg3 }}</td><td>{{ p.ft }}</td>
+            <td class="{{ 'pos' if p.pm > 0 else ('neg' if p.pm < 0 else '') }}">{{ "%+d"|format(p.pm) if p.pm else "0" }}</td>
+            <td>{{ "%.0f"|format(100 * p.ts) if p.ts == p.ts and p.ts is not none else "–" }}</td>
+            <td>{{ "%.0f"|format(p.usg) if p.usg == p.usg and p.usg is not none else "–" }}</td>
+            <td class="strong">{{ "%.1f"|format(p.gmsc) }}</td>
+            <td>{% if p.delta is not none %}<span class="delta {{ 'good' if p.delta > 0.5 else ('bad' if p.delta < -0.5 else 'flat') }}">{{ '▲' if p.delta > 0.5 else ('▼' if p.delta < -0.5 else '') }} {{ "%+.1f"|format(p.delta) }}</span>{% else %}<span class="dim">–</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if dnp %}<p class="small">Didn't play: {{ dnp|join("; ") }}.</p>{% endif %}
+    {% if opp_players %}
+    <details class="more">
+      <summary>{{ opp_name or opp }} box score</summary>
+      <div class="table-wrap">
+        <table class="data sticky">
+          <thead><tr>
+            <th class="l">Player</th><th>Min</th><th>Pts</th><th>Reb</th><th>OReb</th><th>Ast</th><th>Stl</th><th>Blk</th><th>TO</th>
+            <th>FG</th><th>3P</th><th>FT</th><th>+/−</th><th>TS%</th><th>GmSc</th>
+          </tr></thead>
+          <tbody>
+            {% for p in opp_players %}
+            {% if loop.first %}<tr class="group"><td colspan="15" class="l">Starters</td></tr>{% endif %}
+            {% if not p.starter and (loop.first or loop.previtem.starter) %}<tr class="group"><td colspan="15" class="l">Bench</td></tr>{% endif %}
+            <tr>
+              <td class="l player">{{ p.name }}<small>{{ p.pos }}</small></td>
+              <td>{{ "%.0f"|format(p.min) }}</td><td class="strong">{{ p.pts }}</td><td>{{ p.reb }}</td><td>{{ p.oreb }}</td><td>{{ p.ast }}</td>
+              <td>{{ p.stl }}</td><td>{{ p.blk }}</td><td>{{ p.tov }}</td>
+              <td>{{ p.fg }}</td><td>{{ p.fg3 }}</td><td>{{ p.ft }}</td>
+              <td class="{{ 'pos' if p.pm > 0 else ('neg' if p.pm < 0 else '') }}">{{ "%+d"|format(p.pm) if p.pm else "0" }}</td>
+              <td>{{ "%.0f"|format(100 * p.ts) if p.ts == p.ts and p.ts is not none else "–" }}</td>
+              <td class="strong">{{ "%.1f"|format(p.gmsc) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {% endif %}
+  </section>
+
+  {% if specs.shots %}
+  <section aria-labelledby="shots">
+    <div class="head">
+      <p class="eyebrow">Shot profile</p>
+      <h2 id="shots">Where the shots came from</h2>
+      <p class="lede">Every {{ cfg.TEAM_NAME }} field-goal attempt. The efficient shots in today's NBA are at the rim and from three, corners especially; mid-range twos are the least valuable on average.</p>
+    </div>
+    <div class="split even">
+      <div class="plate"><div class="chart" data-spec="shots" role="img" aria-label="{{ cfg.TEAM_NAME }} shot chart"></div></div>
+      <div class="table-wrap">
+        <table class="data compact sticky">
+          <thead><tr><th class="l">Zone</th><th>FG</th><th>FG%</th><th>Share</th><th class="wrap">{{ zones_label }}<br>share</th><th class="wrap">{{ zones_label }}<br>FG%</th><th class="wrap">League<br>FG%</th></tr></thead>
+          <tbody>{% for z in zones %}<tr><td class="l">{{ z.zone }}</td><td>{{ z.fgm }}-{{ z.fga }}</td><td class="strong">{{ z.fg }}</td><td>{{ z.share }}%</td><td class="dim">{{ z.s_share }}%</td><td class="dim">{{ z.s_fg }}</td><td class="dim">{{ z.l_fg }}</td></tr>{% endfor %}</tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <section aria-labelledby="analysis">
+    <div class="head">
+      <p class="eyebrow">Your turn</p>
+      <h2 id="analysis">What stands out, and why</h2>
+      <p class="lede">The code flags what was unusual. Explaining why it happened, and whether it will last, is the analyst's job: that's what goes in your notes.</p>
+    </div>
+    <div class="cols">
+      <div class="plate"><h3 style="margin-bottom:10px">What stands out</h3>
+        <ul class="facts">{% for f in facts %}<li class="{{ f.kind }}">{{ f.text }}</li>{% endfor %}</ul>
+      </div>
+      <div class="plate"><h3 style="margin-bottom:10px">Questions for your notes</h3>
+        <ol class="questions">{% for q in questions %}<li>{{ q }}</li>{% endfor %}</ol>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="notes">
+    <div class="head">
+      <p class="eyebrow">Analyst notes</p>
+      <h2 id="notes">The write-up</h2>
+    </div>
+    {% if notes_html %}
+    <div class="plate notes">{{ notes_html|safe }}</div>
+    {% else %}
+    <div class="callout">No notes yet. Write yours in <code>{{ notes_rel }}</code> (the questions above are already in it), then run <code>python run.py game --id {{ game_id }}</code> to put them here.</div>
+    {% endif %}
+  </section>
+
+  <footer class="foot">
+    {% if pngs and img_rel %}<p>Charts to post: {% for p in pngs %}<a href="{{ img_rel }}/{{ p }}">{{ p }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+    <p>Possessions use Basketball-Reference's estimate. Clutch time is the NBA's definition: the last five minutes of the fourth quarter or overtime with the score within five. Shot zones follow the NBA's areas; end-of-quarter heaves are excluded, as in official stats.</p>
+    <p>{{ cfg.DATA_CREDIT }}{% if meta.officials %} · Officials: {{ meta.officials|join(", ") }}{% endif %} · ESPN game {{ game_id }} · Built {{ generated }}</p>
+  </footer>
+</main>
+{% include "_scripts.html" %}

@@ -1,0 +1,20 @@
+{% set page_title = cfg.TEAM_NAME ~ " Analytics" %}
+{% set fragment = False %}{% set specs = {} %}{% set js = {} %}
+{% include "_head.html" %}
+<main class="page">
+  <header class="board">
+    <p class="eyebrow">{{ cfg.TEAM_CITY }} {{ cfg.TEAM_NAME }}</p>
+    <h1>Game-by-game analytics</h1>
+    <p class="lede">Every game broken down: efficiency, the four factors, game flow, players and shot profile, with written analysis.{% if cfg.CREDIT %} By {{ cfg.CREDIT }}.{% endif %}</p>
+  </header>
+  <section>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th class="l">Season</th><th class="l"></th></tr></thead>
+        <tbody>{% for s in seasons %}<tr><td class="l strong">{{ s }}</td><td class="l"><a href="{{ s }}/index.html">Season tracker and game reports</a></td></tr>{% endfor %}</tbody>
+      </table>
+    </div>
+  </section>
+  <footer class="foot"><p>{{ cfg.DATA_CREDIT }} · Built {{ generated }}</p></footer>
+</main>
+{% include "_scripts.html" %}
